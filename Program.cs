@@ -395,8 +395,8 @@ namespace roll20_adv_import_c
         {
             PdfConverter pdf = new PdfConverter();
             //pdf.convert(@"pdf\The_One_Ring_Core_Rules.pdf", @"out/log.txt");
-            pdf.convert(@"pdf\Adversary Conversion.pdf", @"out/log.txt");
-            string input = File.ReadAllText("out/log.txt", Encoding.UTF8);
+            pdf.convert(@"./pdf/Adversary Conversion.pdf", @"out/log.txt");
+            string input = File.ReadAllText("./out/log.txt", Encoding.UTF8);
             //  string input =
             //      "same as other folk…”Southerner RaiderWhen a particularly harsh winter has passed, Men from the South may assemble war parties and look for some isolated homestead to plunder, before retreating just as quickly back into the mists where they came from.SOUTHERNER RAIDERCanny, HardenedATTRIBUTE LEVEL4ENDURANCE16MIGHT1RESOLVE4PARRY+1ARMOUR2COMBAT PROFICIENCIES: Axe 3 (5/18),  Short Spear 2 (3/14, Pierce)FELL ABILITIES: Fierce Folk. Spend 1 Resolve point to gain (1d) and make the attack roll Favoured. "
             //      + "Favoured.Southerner ChampionA Southerner Champion may be a chieftain from Dun-land, a bandit lord capable of uniting a number of frac-tious warriors into a small army, or just a particularly vicious brigand.SOUTHERNER CHAMPIONCruel, ToughATTRIBUTE LEVEL5ENDURANCE20MIGHT1RESOLVE5PARRY+2ARMOUR3COMBAT PROFICIENCIES: Spear 3 (4/14, Pierce),  Long- hafted Axe 3 (6/18, Break Shield) FELL ABILITIES: Fierce Folk. Spend 1 Resolve point to gain (1d) on an attack and to make the roll Favoured.Bodo Hüsemann (Order #31660777)";
@@ -406,7 +406,7 @@ namespace roll20_adv_import_c
             
             //var parsed = advs_core.Parse(sanitized);
             var parsed = advs_add.Parse(sanitized);
-            string fileName = "out/result.json";
+            string fileName = "./out/result.json";
             JsonSerializerOptions jso = new JsonSerializerOptions
             {
                 WriteIndented = true,
