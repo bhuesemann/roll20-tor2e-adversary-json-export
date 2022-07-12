@@ -55,10 +55,10 @@ namespace roll20_adv_import_c
             , "ETTINS"
             , "FUNGAL TROLL"
             , "MARSH-OGRE"
-            //, "ATTERCOP"
+            , "ATTERCOP"
             , "GREAT SPIDER"
             , "HUNTER SPIDER"
-            //, "GREAT BAT"
+            , "GREAT BAT"
             , "SECRET SHADOW [D]"
             , "HILL-MEN OF RHUDAUR"
             , "GUNDABAD SPIRIT WARGS"
@@ -67,14 +67,14 @@ namespace roll20_adv_import_c
             , "DUNLENDING RAIDERS"
             , "WULFING RIDERS"
             , "WARRIORS OF THE GAESELA"
-            //, "MEN OF ISENGARD"
-            //, "BOG SOLDIERS [M]"
-            //, "DEAD MEN OF DUNHARROW"
-            //, "SPECTRES"
+            , "MEN OF ISENGARD"
+            , "BOG SOLDIERS [E]"
+            , "DEAD MEN OF DUNHARROW"
+            , "SPECTRES"
             , "WOOD-WIGHT"
             , "GRIM HAWKS"
             , "BASILISK"
-            , "HUORNS"
+            , "HUORNS."
             , "THE QUEEN ON CASTLE HILL [E]"
             , "BLOODSTUMP THE HUNTER [E]"
             , "GORGOL, SON OF BOLG [E]"
@@ -90,13 +90,13 @@ namespace roll20_adv_import_c
             , "THE WITCH-KING OF ANGMAR"
             , "THE HORSE-EATER [E]"
             , "CASELWUN"
-            //, "BLODRED"
-            //, "RHONWEN"
-            //, "DUNLENDING WARRIORS"
-            //, "THE BARROW-WITCH"
+            , "BLODRED"
+            , "RHONWEN"
+            , "DUNLENDING WARRIORS"
+            , "THE BARROW-WITCH"
             , "THE GREY HORSE [D]"
-            //, "HORSE-LORDS SPECTRE"
-            //, "AGENTS OF MORDOR"
+            , "HORSE-LORDS SPECTRE"
+            , "AGENTS OF MORDOR"
             , "BANDITS FROM THE SOUTH"
             , "HIRDAN, BANDIT LEADER [E]"
             , "MALTHOR, THE AXE-BITTEN [E]"
@@ -212,9 +212,12 @@ namespace roll20_adv_import_c
         };
         public static readonly List<string> AdversaryEndTokenList = new List<string> {
             // Additional
-            "Great Spider"
+            "Don't delete me"
+            , "Great Spider Great Spiders display"
             , "spiders of mirkwood"
             , "Secret Shadow"
+            , "Bog Soldiers Dead soldiers"
+            , "Basilisks Called Sarnlug"
             // Core
             , "Southerner Raider"
             , "Southerner Champion"
@@ -267,8 +270,17 @@ namespace roll20_adv_import_c
         public static Parser<string> TokenFellAbilities = Parse.IgnoreCase("FELL ABILITIES:").Token().Text();
 
         public static Parser<string> FellAbilitiesOptional = 
-            from tokenFellAbilities in TokenFellAbilities
-            from fellAbilities in Parse.AnyChar.Except(TokenAttributeLevel).Many().Token().Text()
+            from fellAbilities in 
+                TokenFellAbilities
+                    .Then(
+                        _ => Parse.AnyChar
+                        .Except(TokenAttributeLevel)
+                        .Except(ListParser(AdversaryTokenList))
+                        .Except(ListParser(AdversaryEndTokenList))
+                        .Many()
+                        .Token()
+                        .Text()
+                    )
             select fellAbilities;
 
         public static Parser<string> WordParser = Parse.Letter.Many().Token().Or(Parse.String("2-Handed")).Text();
@@ -294,9 +306,11 @@ namespace roll20_adv_import_c
             from comma in Parse.Char(',').Many().Token()
             from special in PhraseParser.Text()
             from rpar in Parse.Char(')')
-            from rest in Parse.AnyChar.Except(Parse.Chars(',', '.'))
+            from rest in Parse.AnyChar
+                .Except(Parse.Chars(',', '.'))
                 .Except(TokenFellAbilities)
-                .Except(ListParser(AdversaryTokenList).Or(ListParser(AdversaryEndTokenList)))
+                .Except(ListParser(AdversaryTokenList))
+                .Except(ListParser(AdversaryEndTokenList))
                 .Many().Text()
             from point in Parse.Char('.').Optional()
             select new WeaponProficiency()
@@ -316,34 +330,41 @@ namespace roll20_adv_import_c
             from leading in Parse.AnyChar.Except(ListParser(AdversaryTokenList)).Many()
             from name in ListParser(AdversaryTokenList)
             from dfeat in Parse.AnyChar.Except(TokenCombatProficiencies).Many().Token().Text()
-            from tokenCombatProf in TokenCombatProficiencies
-            from weaponProf in weapons
+            from weaponProf in TokenCombatProficiencies.Then(_ => weapons.Optional())
             from fellAbilities in FellAbilitiesOptional.Optional()
-            from tokenAttributeLevel in TokenAttributeLevel.Token()
-            from attributeLevel in Parse.Number.Token()
-            from tokenEndurance in TokenEndurance.Token()
-            from endurance in Parse.Number.Token()
-            from tokenMight in TokenMight.Token()
-            from might in Parse.Number.Token()
-            from tokenHateResolve in TokenHateResolve.Token()
-            from hateResolve in Parse.Number.Token()
-            from tokenParry in TokenParry.Token()
-            from parry in Parse.AnyChar.Except(TokenArmour).Many().Token().Text()
-            from tokenArmour in TokenArmour
-            from armour in Parse.Number.Token()
-            //from end in Parse.AnyChar.Except(ListParser(AdversaryTokenList).Or(ListParser(AdversaryEndTokenList)))
+            from tokenAttributeLevel in TokenAttributeLevel.Token().Optional()
+            from attributeLevel in Parse.Number.Token().Optional()
+            from tokenEndurance in TokenEndurance.Token().Optional()
+            from endurance in Parse.Number.Token().Optional()
+            from tokenMight in TokenMight.Token().Optional()
+            from might in Parse.Number.Token().Optional()
+            from tokenHateResolve in TokenHateResolve.Token().Optional()
+            from hateResolve in Parse.Number.Token().Optional()
+            from tokenParry in TokenParry.Token().Optional()
+            from parry in 
+                Parse.AnyChar
+                    .Except(TokenArmour)
+                    .Except(ListParser(AdversaryTokenList))
+                    .Except(ListParser(AdversaryEndTokenList))
+                    .Many().Token().Text().Optional()
+            from tokenArmour in TokenArmour.Optional()
+            from armour in Parse.Number.Token().Optional()
+            from end in Parse.AnyChar
+                .Except(ListParser(AdversaryTokenList))
+                .Except(ListParser(AdversaryEndTokenList))
+                .Optional()
             select new Adversary()
             {
                 name = name,
                 distinctiveFeatures = dfeat,
-                attributeLevel = attributeLevel,
-                endurance = endurance,
-                might = might,
-                hateresolve = hateResolve,
-                parry = parry,
-                armour = armour,
-                weaponProficiencies = weaponProf,
-                fellAbilities = fellAbilities.IsDefined? fellAbilities.Get().Trim() : ""
+                attributeLevel = attributeLevel.IsDefined ? attributeLevel.Get() : "",
+                endurance = endurance.IsDefined ? endurance.Get() : "",
+                might = might.IsDefined ? might.Get() : "",
+                hateresolve = hateResolve.IsDefined ? hateResolve.Get() : "",
+                parry = parry.IsDefined ? parry.Get() : "",
+                armour = armour.IsDefined ? armour.Get() : "",
+                weaponProficiencies = weaponProf.IsDefined ? weaponProf.Get() : null,
+                fellAbilities = fellAbilities.IsDefined ? fellAbilities.Get() : ""
             };
 
         public static Parser<Adversary> adv_core =
@@ -400,9 +421,10 @@ namespace roll20_adv_import_c
             //  string input =
             //      "same as other folk…”Southerner RaiderWhen a particularly harsh winter has passed, Men from the South may assemble war parties and look for some isolated homestead to plunder, before retreating just as quickly back into the mists where they came from.SOUTHERNER RAIDERCanny, HardenedATTRIBUTE LEVEL4ENDURANCE16MIGHT1RESOLVE4PARRY+1ARMOUR2COMBAT PROFICIENCIES: Axe 3 (5/18),  Short Spear 2 (3/14, Pierce)FELL ABILITIES: Fierce Folk. Spend 1 Resolve point to gain (1d) and make the attack roll Favoured. "
             //      + "Favoured.Southerner ChampionA Southerner Champion may be a chieftain from Dun-land, a bandit lord capable of uniting a number of frac-tious warriors into a small army, or just a particularly vicious brigand.SOUTHERNER CHAMPIONCruel, ToughATTRIBUTE LEVEL5ENDURANCE20MIGHT1RESOLVE5PARRY+2ARMOUR3COMBAT PROFICIENCIES: Spear 3 (4/14, Pierce),  Long- hafted Axe 3 (6/18, Break Shield) FELL ABILITIES: Fierce Folk. Spend 1 Resolve point to gain (1d) on an attack and to make the roll Favoured.Bodo Hüsemann (Order #31660777)";
-
+            // string input = " they once used to love or inhabit. SPECTRES Restless, Sorrowful       Combat Proficiencies:  Fell Abilities: Ghost Form. The creature is incorporeal and partially, if not completely, invisible. It cannot normally harm nor can be harmed physically by the living. When this creatures Hate score is reduced to 0, it disappears and reappears the next night with its hate score refilled. Weapons that do not possess Enchanted qualities cannot affect this creature. Dreadful Spells. Spend 1 Hate to force a player-hero to gain 2 points of Shadow (Sorcery). If the hero fails their Shadow Test, they are Wounded as an old injury reopens. Visions of Torment. Spend 1 Hate to force a player-hero to gain 1 point of Shadow (Dread). If the hero fails their Shadow Test, they lose a number of Endurance points equal to twice their current Shadow score. Bog Soldiers Dead soldiers of a war long past, lying in rest beneath the Ettenmoors..BOG SOLDIERS [M] Relentless, Foul";
             string sanitized = input.Replace('\u00A0', ' ');
             sanitized = sanitized.Replace("- ", "-");
+            sanitized = sanitized.Replace("HUORNS Ancient, Vengeful", "HUORNS. Ancient, Vengeful");
             
             //var parsed = advs_core.Parse(sanitized);
             var parsed = advs_add.Parse(sanitized);
