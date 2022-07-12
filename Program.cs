@@ -68,13 +68,13 @@ namespace roll20_adv_import_c
             , "WULFING RIDERS"
             , "WARRIORS OF THE GAESELA"
             , "MEN OF ISENGARD"
-            , "BOG SOLDIERS [M]"
+            , "BOG SOLDIERS [E]"
             , "DEAD MEN OF DUNHARROW"
             , "SPECTRES"
             , "WOOD-WIGHT"
             , "GRIM HAWKS"
             , "BASILISK"
-            , "HUORNS"
+            , "HUORNS."
             , "THE QUEEN ON CASTLE HILL [E]"
             , "BLOODSTUMP THE HUNTER [E]"
             , "GORGOL, SON OF BOLG [E]"
@@ -212,9 +212,13 @@ namespace roll20_adv_import_c
         };
         public static readonly List<string> AdversaryEndTokenList = new List<string> {
             // Additional
-            "Great Spider"
+            "Don't delete me"
+            , "Great Spider Great Spiders display"
             , "spiders of mirkwood"
             , "Secret Shadow"
+            , "Bog Soldiers Dead soldiers"
+            , "Basilisks Called Sarnlug"
+            , "27 kinstrife & dark tidings"
             // Core
             , "Southerner Raider"
             , "Southerner Champion"
@@ -267,8 +271,17 @@ namespace roll20_adv_import_c
         public static Parser<string> TokenFellAbilities = Parse.IgnoreCase("FELL ABILITIES:").Token().Text();
 
         public static Parser<string> FellAbilitiesOptional =
-            from tokenFellAbilities in TokenFellAbilities
-            from fellAbilities in Parse.AnyChar.Except(TokenAttributeLevel).Many().Token().Text()
+            from fellAbilities in
+                TokenFellAbilities
+                    .Then(
+                        _ => Parse.AnyChar
+                        .Except(TokenAttributeLevel)
+                        .Except(ListParser(AdversaryTokenList))
+                        .Except(ListParser(AdversaryEndTokenList))
+                        .Many()
+                        .Token()
+                        .Text()
+                    )
             select fellAbilities;
 
         public static Parser<string> WordParser = Parse.Letter.Many().Token().Or(Parse.String("2-Handed")).Text();
@@ -280,20 +293,25 @@ namespace roll20_adv_import_c
             select num.IsDefined ? num.Get() : min.IsDefined ? min.Get().ToString() : "";
 
         public static Parser<string> PhraseParser =
-            from leading in Parse.Letter.Many().Text()
-            from rest in Parse.Chars(' ', '-', ',').Many().Then(_ => WordParser).Many()
+            from leading in Parse.Letter.Many().Token().Text()
+            from rest in Parse.Chars(' ', '-', ',', ':').Many().Then(_ => WordParser).Many()
             select leading + " " + String.Join(" ", rest);
 
         public static Parser<string> DistinctiveFeatureParser =
             from first in WordOrMinusParser
+                // Folulf and Arnulf -> Swift (Folulf), Wary (Arnulf)
+            from left in Parse.Char('(').Optional()
+            from middle in WordParser.Optional()
+            from right in Parse.Char(')').Optional()
             from sep in Parse.Char(',').Token()
-            from second in Parse.AnyChar.Except(TokenCombatProficiencies).Many().Token().Text()
+            from second in WordOrMinusParser
+            from rest in Parse.AnyChar.Except(TokenCombatProficiencies).Many().Token().Text()
             select first + ", " + second;
 
         public static Parser<WeaponProficiency> WeaponParser =
             from weaponname in PhraseParser.Text()
             from s1 in Parse.WhiteSpace.Many()
-            from rating in Parse.Number.Token()
+            from rating in Parse.Number.Token().Optional()
             from s2 in Parse.WhiteSpace.Many()
             from lpar in Parse.Char('(')
             from damage in NumberOrMinus.Token()
@@ -302,18 +320,20 @@ namespace roll20_adv_import_c
             from comma in Parse.Char(',').Many().Token()
             from special in PhraseParser.Text()
             from rpar in Parse.Char(')')
-            from rest in Parse.AnyChar.Except(Parse.Chars(',', '.'))
+            from rest in Parse.AnyChar
+                .Except(Parse.Chars(',', '.', ' '))
                 .Except(TokenFellAbilities)
-                .Except(ListParser(AdversaryTokenList).Or(ListParser(AdversaryEndTokenList)))
+                .Except(ListParser(AdversaryTokenList))
+                .Except(ListParser(AdversaryEndTokenList))
                 .Many().Text()
             from point in Parse.Char('.').Optional()
             select new WeaponProficiency()
             {
-                weaponname = weaponname,
-                rating = rating,
+                weaponname = weaponname.Trim(),
+                rating = rating.IsDefined ? rating.Get() : "",
                 damage = damage,
                 injury = injury,
-                special = special
+                special = special.Trim()
             };
 
         public static readonly Parser<WeaponProficiency[]> weapons =
@@ -324,34 +344,41 @@ namespace roll20_adv_import_c
             from leading in Parse.AnyChar.Except(ListParser(AdversaryTokenList)).Many()
             from name in ListParser(AdversaryTokenList)
             from dfeat in DistinctiveFeatureParser.Optional()
-            from tokenCombatProf in TokenCombatProficiencies.Optional()
-                // from weaponProf in weapons.Optional()
-                // from fellAbilities in FellAbilitiesOptional
-                // from tokenAttributeLevel in TokenAttributeLevel.Token().Optional()
-                // from attributeLevel in Parse.Number.Token().Optional()
-                // from tokenEndurance in TokenEndurance.Token().Optional()
-                // from endurance in Parse.Number.Token().Optional()
-                // from tokenMight in TokenMight.Token().Optional()
-                // from might in Parse.Number.Token().Optional()
-                // from tokenHateResolve in TokenHateResolve.Token().Optional()
-                // from hateResolve in Parse.Number.Token().Optional()
-                // from tokenParry in TokenParry.Token().Optional()
-                // from parry in Parse.AnyChar.Except(TokenArmour).Many().Token().Text().Optional()
-                // from tokenArmour in TokenArmour.Optional()
-                // from armour in Parse.Number.Token().Optional()
-            from end in Parse.AnyChar.Except(ListParser(AdversaryTokenList).Or(ListParser(AdversaryEndTokenList)))
+            from weaponProf in TokenCombatProficiencies.Then(_ => weapons.Optional())
+            from fellAbilities in FellAbilitiesOptional.Optional()
+            from tokenAttributeLevel in TokenAttributeLevel.Token().Optional()
+            from attributeLevel in Parse.Number.Token().Optional()
+            from tokenEndurance in TokenEndurance.Token().Optional()
+            from endurance in Parse.Number.Token().Optional()
+            from tokenMight in TokenMight.Token().Optional()
+            from might in Parse.Number.Token().Optional()
+            from tokenHateResolve in TokenHateResolve.Token().Optional()
+            from hateResolve in Parse.Number.Token().Optional()
+            from tokenParry in TokenParry.Token().Optional()
+            from parry in
+                Parse.AnyChar
+                    .Except(TokenArmour)
+                    .Except(ListParser(AdversaryTokenList))
+                    .Except(ListParser(AdversaryEndTokenList))
+                    .Many().Token().Text().Optional()
+            from tokenArmour in TokenArmour.Optional()
+            from armour in Parse.Number.Token().Optional()
+            from end in Parse.AnyChar
+                .Except(ListParser(AdversaryTokenList))
+                .Except(ListParser(AdversaryEndTokenList))
+                .Optional()
             select new Adversary()
             {
                 name = name,
                 distinctiveFeatures = dfeat.IsDefined ? dfeat.Get() : "",
-                // attributeLevel = attributeLevel,
-                // endurance = endurance,
-                // might = might,
-                // hateresolve = hateResolve,
-                // parry = parry,
-                // armour = armour,
-                // weaponProficiencies = weaponProf,
-                // fellAbilities = fellAbilities.IsDefined ? fellAbilities.Get().Trim() : ""
+                attributeLevel = attributeLevel.IsDefined ? attributeLevel.Get() : "",
+                endurance = endurance.IsDefined ? endurance.Get() : "",
+                might = might.IsDefined ? might.Get() : "",
+                hateresolve = hateResolve.IsDefined ? hateResolve.Get() : "",
+                parry = parry.IsDefined ? parry.Get() : "",
+                armour = armour.IsDefined ? armour.Get() : "",
+                weaponProficiencies = weaponProf.IsDefined ? weaponProf.Get() : new WeaponProficiency[0],
+                fellAbilities = fellAbilities.IsDefined ? fellAbilities.Get() : ""
             };
 
         public static Parser<Adversary> adv_core =
@@ -407,9 +434,11 @@ namespace roll20_adv_import_c
             //  string input =
             //      "same as other folk…”Southerner RaiderWhen a particularly harsh winter has passed, Men from the South may assemble war parties and look for some isolated homestead to plunder, before retreating just as quickly back into the mists where they came from.SOUTHERNER RAIDERCanny, HardenedATTRIBUTE LEVEL4ENDURANCE16MIGHT1RESOLVE4PARRY+1ARMOUR2COMBAT PROFICIENCIES: Axe 3 (5/18),  Short Spear 2 (3/14, Pierce)FELL ABILITIES: Fierce Folk. Spend 1 Resolve point to gain (1d) and make the attack roll Favoured. "
             //      + "Favoured.Southerner ChampionA Southerner Champion may be a chieftain from Dun-land, a bandit lord capable of uniting a number of frac-tious warriors into a small army, or just a particularly vicious brigand.SOUTHERNER CHAMPIONCruel, ToughATTRIBUTE LEVEL5ENDURANCE20MIGHT1RESOLVE5PARRY+2ARMOUR3COMBAT PROFICIENCIES: Spear 3 (4/14, Pierce),  Long- hafted Axe 3 (6/18, Break Shield) FELL ABILITIES: Fierce Folk. Spend 1 Resolve point to gain (1d) on an attack and to make the roll Favoured.Bodo Hüsemann (Order #31660777)";
-
+            // string input = " they once used to love or inhabit. SPECTRES Restless, Sorrowful       Combat Proficiencies:  Fell Abilities: Ghost Form. The creature is incorporeal and partially, if not completely, invisible. It cannot normally harm nor can be harmed physically by the living. When this creatures Hate score is reduced to 0, it disappears and reappears the next night with its hate score refilled. Weapons that do not possess Enchanted qualities cannot affect this creature. Dreadful Spells. Spend 1 Hate to force a player-hero to gain 2 points of Shadow (Sorcery). If the hero fails their Shadow Test, they are Wounded as an old injury reopens. Visions of Torment. Spend 1 Hate to force a player-hero to gain 1 point of Shadow (Dread). If the hero fails their Shadow Test, they lose a number of Endurance points equal to twice their current Shadow score. Bog Soldiers Dead soldiers of a war long past, lying in rest beneath the Ettenmoors..BOG SOLDIERS [M] Relentless, Foul";
             string sanitized = input.Replace('\u00A0', ' ');
             sanitized = sanitized.Replace("- ", "-");
+            sanitized = sanitized.Replace("HUORNS Ancient, Vengeful", "HUORNS. Ancient, Vengeful");
+            sanitized = sanitized.Replace("VALTER’S OUTLAWS", "VALTER’S Outlaws");
 
             //var parsed = advs_core.Parse(sanitized);
             var parsed = advs_add.Parse(sanitized);
