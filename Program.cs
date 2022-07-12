@@ -28,7 +28,7 @@ namespace roll20_adv_import_c
             public string hateresolve { get; set; }
             public string parry { get; set; }
             public string armour { get; set; }
-            public WeaponProficiency[] weaponProficiencies {get; set; }
+            public WeaponProficiency[] weaponProficiencies { get; set; }
             public string fellAbilities { get; set; }
         }
 
@@ -55,10 +55,10 @@ namespace roll20_adv_import_c
             , "ETTINS"
             , "FUNGAL TROLL"
             , "MARSH-OGRE"
-            //, "ATTERCOP"
+            , "ATTERCOP"
             , "GREAT SPIDER"
             , "HUNTER SPIDER"
-            //, "GREAT BAT"
+            , "GREAT BAT"
             , "SECRET SHADOW [D]"
             , "HILL-MEN OF RHUDAUR"
             , "GUNDABAD SPIRIT WARGS"
@@ -67,10 +67,10 @@ namespace roll20_adv_import_c
             , "DUNLENDING RAIDERS"
             , "WULFING RIDERS"
             , "WARRIORS OF THE GAESELA"
-            //, "MEN OF ISENGARD"
-            //, "BOG SOLDIERS [M]"
-            //, "DEAD MEN OF DUNHARROW"
-            //, "SPECTRES"
+            , "MEN OF ISENGARD"
+            , "BOG SOLDIERS [M]"
+            , "DEAD MEN OF DUNHARROW"
+            , "SPECTRES"
             , "WOOD-WIGHT"
             , "GRIM HAWKS"
             , "BASILISK"
@@ -90,13 +90,13 @@ namespace roll20_adv_import_c
             , "THE WITCH-KING OF ANGMAR"
             , "THE HORSE-EATER [E]"
             , "CASELWUN"
-            //, "BLODRED"
-            //, "RHONWEN"
-            //, "DUNLENDING WARRIORS"
-            //, "THE BARROW-WITCH"
+            , "BLODRED"
+            , "RHONWEN"
+            , "DUNLENDING WARRIORS"
+            , "THE BARROW-WITCH"
             , "THE GREY HORSE [D]"
-            //, "HORSE-LORDS SPECTRE"
-            //, "AGENTS OF MORDOR"
+            , "HORSE-LORDS SPECTRE"
+            , "AGENTS OF MORDOR"
             , "BANDITS FROM THE SOUTH"
             , "HIRDAN, BANDIT LEADER [E]"
             , "MALTHOR, THE AXE-BITTEN [E]"
@@ -155,9 +155,9 @@ namespace roll20_adv_import_c
             , "BLUEBELL WOOD OAKMEN"
             , "GORLANC’S FOLLOWERS"
             , "GORLANC [D]"
+            , "LONGO’S LIEUTENANTS"
             , "LONGO"
             , "GUNVAR’S BODYGUARDS"
-            , "LONGO’S LIEUTENANTS"
             , "GUNVAR’S MEN-AT-ARMS"
             , "FIRBUL, SNAGA TRACKER [D]"
             , "CUTTHROATS OF THE DALELANDS"
@@ -266,22 +266,30 @@ namespace roll20_adv_import_c
         public static Parser<string> TokenCombatProficiencies = Parse.IgnoreCase("COMBAT PROFICIENCIES:").Token().Text();
         public static Parser<string> TokenFellAbilities = Parse.IgnoreCase("FELL ABILITIES:").Token().Text();
 
-        public static Parser<string> FellAbilitiesOptional = 
+        public static Parser<string> FellAbilitiesOptional =
             from tokenFellAbilities in TokenFellAbilities
             from fellAbilities in Parse.AnyChar.Except(TokenAttributeLevel).Many().Token().Text()
             select fellAbilities;
 
         public static Parser<string> WordParser = Parse.Letter.Many().Token().Or(Parse.String("2-Handed")).Text();
-        public static Parser<string> NumberOrMinus = 
+        public static Parser<string> WordOrMinusParser = Parse.Letter.Or(Parse.Char('-')).Many().Token().Text();
+
+        public static Parser<string> NumberOrMinus =
             from min in Parse.Char('-').Optional()
             from num in Parse.Number.Token().Optional()
-            select num.IsDefined ? num.Get() : min.IsDefined ? min.Get().ToString(): "";
-            
+            select num.IsDefined ? num.Get() : min.IsDefined ? min.Get().ToString() : "";
+
         public static Parser<string> PhraseParser =
             from leading in Parse.Letter.Many().Text()
             from rest in Parse.Chars(' ', '-', ',').Many().Then(_ => WordParser).Many()
             select leading + " " + String.Join(" ", rest);
-        
+
+        public static Parser<string> DistinctiveFeatureParser =
+            from first in WordOrMinusParser
+            from sep in Parse.Char(',').Token()
+            from second in Parse.AnyChar.Except(TokenCombatProficiencies).Many().Token().Text()
+            select first + ", " + second;
+
         public static Parser<WeaponProficiency> WeaponParser =
             from weaponname in PhraseParser.Text()
             from s1 in Parse.WhiteSpace.Many()
@@ -307,7 +315,7 @@ namespace roll20_adv_import_c
                 injury = injury,
                 special = special
             };
-        
+
         public static readonly Parser<WeaponProficiency[]> weapons =
              from a in WeaponParser.DelimitedBy(Parse.Chars(',', ' ', '.').Many().Token())
              select a.ToArray();
@@ -315,42 +323,41 @@ namespace roll20_adv_import_c
         public static Parser<Adversary> adv_add =
             from leading in Parse.AnyChar.Except(ListParser(AdversaryTokenList)).Many()
             from name in ListParser(AdversaryTokenList)
-            from dfeat in Parse.AnyChar.Except(TokenCombatProficiencies).Many().Token().Text()
-            from tokenCombatProf in TokenCombatProficiencies
-            from weaponProf in weapons
-            from fellAbilities in FellAbilitiesOptional.Optional()
-            from tokenAttributeLevel in TokenAttributeLevel.Token()
-            from attributeLevel in Parse.Number.Token()
-            from tokenEndurance in TokenEndurance.Token()
-            from endurance in Parse.Number.Token()
-            from tokenMight in TokenMight.Token()
-            from might in Parse.Number.Token()
-            from tokenHateResolve in TokenHateResolve.Token()
-            from hateResolve in Parse.Number.Token()
-            from tokenParry in TokenParry.Token()
-            from parry in Parse.AnyChar.Except(TokenArmour).Many().Token().Text()
-            from tokenArmour in TokenArmour
-            from armour in Parse.Number.Token()
-            //from end in Parse.AnyChar.Except(ListParser(AdversaryTokenList).Or(ListParser(AdversaryEndTokenList)))
+            from dfeat in DistinctiveFeatureParser.Optional()
+            from tokenCombatProf in TokenCombatProficiencies.Optional()
+                // from weaponProf in weapons.Optional()
+                // from fellAbilities in FellAbilitiesOptional
+                // from tokenAttributeLevel in TokenAttributeLevel.Token().Optional()
+                // from attributeLevel in Parse.Number.Token().Optional()
+                // from tokenEndurance in TokenEndurance.Token().Optional()
+                // from endurance in Parse.Number.Token().Optional()
+                // from tokenMight in TokenMight.Token().Optional()
+                // from might in Parse.Number.Token().Optional()
+                // from tokenHateResolve in TokenHateResolve.Token().Optional()
+                // from hateResolve in Parse.Number.Token().Optional()
+                // from tokenParry in TokenParry.Token().Optional()
+                // from parry in Parse.AnyChar.Except(TokenArmour).Many().Token().Text().Optional()
+                // from tokenArmour in TokenArmour.Optional()
+                // from armour in Parse.Number.Token().Optional()
+            from end in Parse.AnyChar.Except(ListParser(AdversaryTokenList).Or(ListParser(AdversaryEndTokenList)))
             select new Adversary()
             {
                 name = name,
-                distinctiveFeatures = dfeat,
-                attributeLevel = attributeLevel,
-                endurance = endurance,
-                might = might,
-                hateresolve = hateResolve,
-                parry = parry,
-                armour = armour,
-                weaponProficiencies = weaponProf,
-                fellAbilities = fellAbilities.IsDefined? fellAbilities.Get().Trim() : ""
+                distinctiveFeatures = dfeat.IsDefined ? dfeat.Get() : "",
+                // attributeLevel = attributeLevel,
+                // endurance = endurance,
+                // might = might,
+                // hateresolve = hateResolve,
+                // parry = parry,
+                // armour = armour,
+                // weaponProficiencies = weaponProf,
+                // fellAbilities = fellAbilities.IsDefined ? fellAbilities.Get().Trim() : ""
             };
 
         public static Parser<Adversary> adv_core =
             from leading in Parse.AnyChar.Except(ListParser(AdversaryTokenList)).Many()
             from name in ListParser(AdversaryTokenList)
-            from dfeat in Parse.AnyChar.Except(TokenAttributeLevel).Many().Token().Text()
-
+            from dfeat in DistinctiveFeatureParser.Optional()
             from tokenAttributeLevel in TokenAttributeLevel.Token()
             from attributeLevel in Parse.Number.Token()
             from tokenEndurance in TokenEndurance.Token()
@@ -371,7 +378,7 @@ namespace roll20_adv_import_c
             select new Adversary()
             {
                 name = name,
-                distinctiveFeatures = dfeat,
+                distinctiveFeatures = dfeat.IsDefined ? dfeat.Get() : "",
                 attributeLevel = attributeLevel,
                 endurance = endurance,
                 might = might,
@@ -403,7 +410,7 @@ namespace roll20_adv_import_c
 
             string sanitized = input.Replace('\u00A0', ' ');
             sanitized = sanitized.Replace("- ", "-");
-            
+
             //var parsed = advs_core.Parse(sanitized);
             var parsed = advs_add.Parse(sanitized);
             string fileName = "./out/result.json";
