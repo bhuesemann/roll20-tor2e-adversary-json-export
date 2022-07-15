@@ -68,7 +68,7 @@ namespace roll20_adv_import_c
             , "WULFING RIDERS"
             , "WARRIORS OF THE GAESELA"
             , "MEN OF ISENGARD"
-            , "BOG SOLDIERS [E]"
+            , "BOG SOLDIERS [M]"
             , "DEAD MEN OF DUNHARROW"
             , "SPECTRES"
             , "WOOD-WIGHT"
@@ -354,6 +354,12 @@ namespace roll20_adv_import_c
             from might in Parse.Number.Token().Optional()
             from tokenHateResolve in TokenHateResolve.Token().Optional()
             from hateResolve in Parse.Number.Token().Optional()
+            from hateResolveRest in
+                Parse.AnyChar
+                    .Except(TokenParry)
+                    .Except(ListParser(AdversaryTokenList))
+                    .Except(ListParser(AdversaryEndTokenList))
+                    .Many().Token().Text().Optional() // needed to parse VOGAR which has hate/resolve: 2/6
             from tokenParry in TokenParry.Token().Optional()
             from parry in
                 Parse.AnyChar
@@ -375,7 +381,7 @@ namespace roll20_adv_import_c
                 endurance = endurance.IsDefined ? endurance.Get() : "",
                 might = might.IsDefined ? might.Get() : "",
                 hateresolve = hateResolve.IsDefined ? hateResolve.Get() : "",
-                parry = parry.IsDefined ? parry.Get() : "",
+                parry = (parry.IsDefined ? parry.Get() : "") + (hateResolveRest.IsDefined ? hateResolveRest.Get() : ""),
                 armour = armour.IsDefined ? armour.Get() : "",
                 weaponProficiencies = weaponProf.IsDefined ? weaponProf.Get() : new WeaponProficiency[0],
                 fellAbilities = fellAbilities.IsDefined ? fellAbilities.Get() : ""
