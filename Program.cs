@@ -10,6 +10,12 @@ namespace roll20_adv_import_c
 {
     class Program
     {
+        public class FellAbility
+        {
+            public string abilityname { get; set; }
+            public string description { get; set; }
+        }
+
         public class WeaponProficiency
         {
             public string weaponname { get; set; }
@@ -29,9 +35,97 @@ namespace roll20_adv_import_c
             public string parry { get; set; }
             public string armour { get; set; }
             public WeaponProficiency[] weaponProficiencies { get; set; }
-            public string fellAbilities { get; set; }
+            public FellAbility[] fellAbilities { get; set; }
         }
 
+        public static readonly List<string> FellAbilitiesTokenList = new List<string>{
+            "Beast-Tamer",
+            "Berserk Rage",
+            "Bewilder",
+            "Black Breath",
+            "Black Dread",
+            "Countless Children",
+            "Cowardly",
+            "Craven",
+            "Crazed",
+            "Cruel Stroke",
+            "Dark Glamour",
+            "Darker than the Darkness",
+            "Deadly Elusiveness",
+            "Deadly Misfortune",
+            "Deadly Voice",
+            "Deadly Wound",
+            "Deathless",
+            "Defend Ally",
+            "Denizen of the Dark",
+            "Disgorge",
+            "Dreadful Spells",
+            "Drowning in Sorrow",
+            "Dwimmerlaik",
+            "Enthrall",
+            "Fear of Fire",
+            "Feast on Suffering",
+            "Fell Speed",
+            "Fierce Folk",
+            "Fire Breath",
+            "Formidable",
+            "Foul Reek",
+            "Four-Armed",
+            "Ghost Form",
+            "Gorlanc’s Poison",
+            "Great Leap",
+            "Hate Sunlight",
+            "Hatred (Beornings & Elves)",
+            "Hatred (Beornings)",
+            "Hatred (Dunedain)",
+            "Hatred (Dunedain) and (Elves)",
+            "Hatred (Dwarves)",
+            "Hatred (Elves)",
+            "Hatred (Everyone)",
+            "Hatred (First Foe to Strike Him)",
+            "Hatred (Hobbits)",
+            "Hatred (Men of Rohan)",
+            "Hatred (Orcs)",
+            "Hatred (Riders of Rohan)",
+            "Heartless",
+            "Hero is caught up in fantasies",
+            "Hideous Toughness",
+            "Horrible Strength",
+            "Horror of the Wood",
+            "Many Poisons",
+            "Mirkwood Dweller",
+            "Paralyzing-Poison",
+            "Poison Blast",
+            "Poisoned Blade",
+            "Prohibition",
+            "Raven Spirits",
+            "Reckless Hate",
+            "Savage Assault",
+            "Seize and Drown",
+            "Shade Caller",
+            "Shadow of Fear",
+            "Sleep",
+            "Snake-Like Speed",
+            "Strange Venoms",
+            "Strike Fear",
+            "Terror of Desire",
+            "Thick Hide",
+            "Thing of Terror",
+            "Thrall (Spiders)",
+            "Two-Headed",
+            "Two-Headed OR Four-Armed",
+            "Venomous Breath",
+            "Visions of Torment",
+            "Weak Spot",
+            "Weakened",
+            "Web",
+            "Webs of Illusion",
+            "Wicked Cunning",
+            "Words of Power and Terror",
+            "Wraith-Like",
+            "Wrapped in Shadow",
+            "Yell of Triumph"
+        };
         public static readonly List<string> AdversaryTokenList = new List<string> {
             // Additional
             "BLACK URUK"
@@ -260,7 +354,10 @@ namespace roll20_adv_import_c
             }
             return parser;
         }
-        public static Parser<IEnumerable<char>> TokenAttributeLevel = Parse.IgnoreCase("ATTRIBUTE LEVEL").Token().Text();
+        public static Parser<string> listParserFellAbilities = ListParser(FellAbilitiesTokenList);
+        public static Parser<string> listParserAdversaries = ListParser(AdversaryTokenList);
+        public static Parser<string> listParserAdversariesEnd = ListParser(AdversaryEndTokenList);
+        public static Parser<string> TokenAttributeLevel = Parse.IgnoreCase("ATTRIBUTE LEVEL").Token().Text();
         public static Parser<string> TokenEndurance = Parse.IgnoreCase("ENDURANCE").Token().Text();
         public static Parser<string> TokenMight = Parse.IgnoreCase("MIGHT").Token().Text();
         public static Parser<string> TokenResolve = Parse.IgnoreCase("RESOLVE").Token().Text();
@@ -270,19 +367,31 @@ namespace roll20_adv_import_c
         public static Parser<string> TokenCombatProficiencies = Parse.IgnoreCase("COMBAT PROFICIENCIES:").Token().Text();
         public static Parser<string> TokenFellAbilities = Parse.IgnoreCase("FELL ABILITIES:").Token().Text();
 
-        public static Parser<string> FellAbilitiesOptional =
-            from fellAbilities in
-                TokenFellAbilities
-                    .Then(
-                        _ => Parse.AnyChar
-                        .Except(TokenAttributeLevel)
-                        .Except(ListParser(AdversaryTokenList))
-                        .Except(ListParser(AdversaryEndTokenList))
-                        .Many()
-                        .Token()
-                        .Text()
-                    )
-            select fellAbilities;
+        public static Parser<FellAbility> FellAbilityParser =
+            from fellAbilityName in listParserFellAbilities
+            from sep in Parse.Char('.')
+            from fellAbilityDescription in Parse.AnyChar
+                    .Except(listParserFellAbilities)
+                    .Except(TokenAttributeLevel)
+                    .Except(listParserAdversaries)
+                    .Except(listParserAdversariesEnd)
+                    .Many()
+                    .Token()
+                    .Text()
+            select new FellAbility()
+            {
+                abilityname = fellAbilityName.Trim(),
+                description = fellAbilityDescription.Trim()
+            };
+
+        public static readonly Parser<FellAbility[]> fellAbilityList =
+            from abilities in FellAbilityParser.Many()
+            from rest in Parse.AnyChar
+                .Except(TokenAttributeLevel)
+                .Except(listParserAdversaries)
+                .Except(listParserAdversariesEnd)
+                .Many().Token().Text().Optional()
+            select abilities.ToArray();
 
         public static Parser<string> WordParser = Parse.Letter.Many().Token().Or(Parse.String("2-Handed")).Text();
         public static Parser<string> WordOrMinusParser = Parse.Letter.Or(Parse.Char('-')).Many().Token().Text();
@@ -323,8 +432,8 @@ namespace roll20_adv_import_c
             from rest in Parse.AnyChar
                 .Except(Parse.Chars(',', '.', ' '))
                 .Except(TokenFellAbilities)
-                .Except(ListParser(AdversaryTokenList))
-                .Except(ListParser(AdversaryEndTokenList))
+                .Except(listParserAdversaries)
+                .Except(listParserAdversariesEnd)
                 .Many().Text()
             from point in Parse.Char('.').Optional()
             select new WeaponProficiency()
@@ -338,40 +447,37 @@ namespace roll20_adv_import_c
 
         public static readonly Parser<WeaponProficiency[]> weapons =
              from a in WeaponParser.DelimitedBy(Parse.Chars(',', ' ', '.').Many().Token())
+             from weaponProfRest in Parse.AnyChar
+                 .Except(TokenFellAbilities)
+                 .Except(listParserAdversaries)
+                 .Except(listParserAdversariesEnd)
+                 .Many().Token().Text().Optional()
              select a.ToArray();
 
         public static Parser<Adversary> adv_add =
-            from leading in Parse.AnyChar.Except(ListParser(AdversaryTokenList)).Many()
-            from name in ListParser(AdversaryTokenList)
+            from leading in Parse.AnyChar.Except(listParserAdversaries).Many()
+            from name in listParserAdversaries
             from dfeat in DistinctiveFeatureParser.Optional()
-            from weaponProf in TokenCombatProficiencies.Then(_ => weapons.Optional())
-            from fellAbilities in FellAbilitiesOptional.Optional()
-            from tokenAttributeLevel in TokenAttributeLevel.Token().Optional()
-            from attributeLevel in Parse.Number.Token().Optional()
-            from tokenEndurance in TokenEndurance.Token().Optional()
-            from endurance in Parse.Number.Token().Optional()
-            from tokenMight in TokenMight.Token().Optional()
-            from might in Parse.Number.Token().Optional()
-            from tokenHateResolve in TokenHateResolve.Token().Optional()
-            from hateResolve in Parse.Number.Token().Optional()
-            from hateResolveRest in
-                Parse.AnyChar
-                    .Except(TokenParry)
-                    .Except(ListParser(AdversaryTokenList))
-                    .Except(ListParser(AdversaryEndTokenList))
-                    .Many().Token().Text().Optional() // needed to parse VOGAR which has hate/resolve: 2/6
-            from tokenParry in TokenParry.Token().Optional()
-            from parry in
-                Parse.AnyChar
-                    .Except(TokenArmour)
-                    .Except(ListParser(AdversaryTokenList))
-                    .Except(ListParser(AdversaryEndTokenList))
-                    .Many().Token().Text().Optional()
-            from tokenArmour in TokenArmour.Optional()
-            from armour in Parse.Number.Token().Optional()
+            from weaponProf in TokenCombatProficiencies.Optional().Then(_ => weapons.Optional())
+            from fellAbilities in TokenFellAbilities.Optional().Then(_ => fellAbilityList.Optional())
+            from attributeLevel in TokenAttributeLevel.Optional().Then(_ => Parse.Number.Token().Optional())
+            from endurance in TokenEndurance.Optional().Then(_ => Parse.Number.Token().Optional())
+            from might in TokenMight.Token().Optional().Then(_ => Parse.Number.Token().Optional())
+            from hateResolve in TokenHateResolve.Token().Optional().Then(_ => Parse.Number.Token().Optional())
+            from hateResolveRest in Parse.AnyChar
+                .Except(TokenParry)
+                .Except(listParserAdversaries)
+                .Except(listParserAdversariesEnd)
+                .Many().Token().Text().Optional() // needed to parse VOGAR who has hate/resolve: 2/6
+            from parry in TokenParry.Optional().Then(_ => Parse.AnyChar
+                .Except(TokenArmour)
+                .Except(listParserAdversaries)
+                .Except(listParserAdversariesEnd)
+                .Many().Token().Text().Optional())
+            from armour in TokenArmour.Optional().Then(_ => Parse.Number.Token().Optional())
             from end in Parse.AnyChar
-                .Except(ListParser(AdversaryTokenList))
-                .Except(ListParser(AdversaryEndTokenList))
+                .Except(listParserAdversaries)
+                .Except(listParserAdversariesEnd)
                 .Optional()
             select new Adversary()
             {
@@ -384,12 +490,12 @@ namespace roll20_adv_import_c
                 parry = (parry.IsDefined ? parry.Get() : "") + (hateResolveRest.IsDefined ? hateResolveRest.Get() : ""),
                 armour = armour.IsDefined ? armour.Get() : "",
                 weaponProficiencies = weaponProf.IsDefined ? weaponProf.Get() : new WeaponProficiency[0],
-                fellAbilities = fellAbilities.IsDefined ? fellAbilities.Get() : ""
+                fellAbilities = fellAbilities.IsDefined ? fellAbilities.Get() : new FellAbility[0]
             };
 
         public static Parser<Adversary> adv_core =
-            from leading in Parse.AnyChar.Except(ListParser(AdversaryTokenList)).Many()
-            from name in ListParser(AdversaryTokenList)
+            from leading in Parse.AnyChar.Except(listParserAdversaries).Many()
+            from name in listParserAdversaries
             from dfeat in DistinctiveFeatureParser.Optional()
             from tokenAttributeLevel in TokenAttributeLevel.Token()
             from attributeLevel in Parse.Number.Token()
@@ -403,11 +509,8 @@ namespace roll20_adv_import_c
             from parry in Parse.AnyChar.Except(TokenArmour).Many().Token().Text()
             from tokenArmour in TokenArmour
             from armour in Parse.Number.Token()
-
-            from tokenCombatProf in TokenCombatProficiencies
-            from weaponProf in weapons
-            from tokenFellAbilities in TokenFellAbilities.Text().Token()
-            from fellAbilities in Parse.AnyChar.Except(ListParser(AdversaryTokenList).Or(ListParser(AdversaryEndTokenList))).Many().Token().Text()
+            from weaponProf in TokenCombatProficiencies.Then(_ => weapons.Optional())
+            from fellAbilities in TokenFellAbilities.Then(_ => fellAbilityList.Optional())
             select new Adversary()
             {
                 name = name,
@@ -418,16 +521,16 @@ namespace roll20_adv_import_c
                 hateresolve = hateResolve,
                 parry = parry,
                 armour = armour,
-                weaponProficiencies = weaponProf,
-                fellAbilities = fellAbilities.Trim()
+                weaponProficiencies = weaponProf.IsDefined ? weaponProf.Get() : new WeaponProficiency[0],
+                fellAbilities = fellAbilities.IsDefined ? fellAbilities.Get() : new FellAbility[0]
             };
 
         private static readonly Parser<Adversary[]> advs_core =
-            from a in adv_core.DelimitedBy(Parse.AnyChar.Except(ListParser(AdversaryTokenList)).Many().Text())
+            from a in adv_core.DelimitedBy(Parse.AnyChar.Except(listParserAdversaries).Many().Text())
             select a.ToArray();
 
         private static readonly Parser<Adversary[]> advs_add =
-            from a in adv_add.DelimitedBy(Parse.AnyChar.Except(ListParser(AdversaryTokenList)).Many().Text())
+            from a in adv_add.DelimitedBy(Parse.AnyChar.Except(listParserAdversaries).Many().Text())
             select a.ToArray();
 
 
