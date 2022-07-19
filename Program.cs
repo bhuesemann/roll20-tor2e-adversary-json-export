@@ -88,7 +88,6 @@ namespace roll20_adv_import_c
             "Hatred (Orcs).",
             "Hatred (Riders of Rohan).",
             "Heartless.",
-            "Hero is caught up in fantasies.",
             "Hideous Toughness.",
             "Horrible Strength.",
             "Horror of the Wood.",
@@ -548,6 +547,7 @@ namespace roll20_adv_import_c
             sanitized = sanitized.Replace("- ", "-");
             sanitized = sanitized.Replace("HUORNS Ancient, Vengeful", "HUORNS. Ancient, Vengeful");
             sanitized = sanitized.Replace("VALTER’S OUTLAWS", "VALTER’S Outlaws");
+            sanitized = sanitized.Replace("to hit Raenar’s Weak Spot.", "to hit Raenar’s weak spot.");
 
             //var parsed = advs_core.Parse(sanitized);
             var parsed = advs_add.Parse(sanitized);
