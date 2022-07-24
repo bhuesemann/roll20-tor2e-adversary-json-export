@@ -1,12 +1,15 @@
 using Sprache;
-using System;
+using System.Collections.Generic;
 using System.Linq;  
 
 namespace roll20_adv_import_c
 {
     public class TorAdvParserAdd : TorAdvParser
     {
-        private readonly static Parser<Adversary> adv_add =
+        public static void Init(){
+            Config.InitAdd();
+        }
+        private static Parser<Adversary> adv =
             from leading in Parse.AnyChar.Except(listParserAdversaries).Many()
             from name in listParserAdversaries
             from dfeat in DistinctiveFeatureParser.Optional()
@@ -48,8 +51,8 @@ namespace roll20_adv_import_c
                 weaponProficiencies = weaponProf.IsDefined ? weaponProf.Get() : null,
                 fellAbilities = fellAbilities.IsDefined ? fellAbilities.Get() : null
             };
-        public static readonly Parser<Adversary[]> advs_add =
-            from a in adv_add.DelimitedBy(Parse.AnyChar.Except(listParserAdversaries).Many().Text())
+        public static Parser<Adversary[]> advs =
+            from a in adv.DelimitedBy(Parse.AnyChar.Except(listParserAdversaries).Many().Text())
             select a.ToArray();
     }
 }

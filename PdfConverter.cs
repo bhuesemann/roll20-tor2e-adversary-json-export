@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
@@ -7,9 +6,9 @@ using UglyToad.PdfPig.Content;
 
 namespace roll20_adv_import_c
 {
-    class PdfConverter
+    public static class PdfConverter
     {
-        public void convert(string pdfpath, string txtpath)
+        public static void convert(string pdfpath, string txtpath)
         {
             using (PdfDocument document = PdfDocument.Open(pdfpath))
             {
