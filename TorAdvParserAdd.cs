@@ -1,13 +1,15 @@
 using Sprache;
 using System.Collections.Generic;
-using System.Linq;  
+using System.Linq;
 
 namespace roll20_adv_import_c
 {
     public class TorAdvParserAdd : TorAdvParser
     {
-        public static void Init(){
+        public static void Init()
+        {
             Config.InitAdd();
+            listParserAdversaries = ListParser(Config.AdversaryTokenList);
         }
         private static Parser<Adversary> adv =
             from leading in Parse.AnyChar.Except(listParserAdversaries).Many()
@@ -42,9 +44,9 @@ namespace roll20_adv_import_c
                 attributeLevel = attributeLevel.IsDefined ? attributeLevel.Get() : null,
                 endurance = endurance.IsDefined ? endurance.Get() : null,
                 might = might.IsDefined ? might.Get() : null,
-                hate = tokenHateResolve.IsDefined && tokenHateResolve.Get() == "Hate" ? 
+                hate = tokenHateResolve.IsDefined && tokenHateResolve.Get() == "Hate" ?
                     (hateResolve.IsDefined ? hateResolve.Get() : null) : null,
-                resolve = tokenHateResolve.IsDefined && tokenHateResolve.Get() == "Resolve" ? 
+                resolve = tokenHateResolve.IsDefined && tokenHateResolve.Get() == "Resolve" ?
                     (hateResolve.IsDefined ? hateResolve.Get() : null) : null,
                 parry = (parry.IsDefined ? parry.Get() : null) + (hateResolveRest.IsDefined ? hateResolveRest.Get() : null),
                 armour = armour.IsDefined ? armour.Get() : null,
