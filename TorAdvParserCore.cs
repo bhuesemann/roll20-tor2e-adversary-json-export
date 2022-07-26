@@ -1,5 +1,5 @@
 using Sprache;
-using System.Collections.Generic;
+using System;
 using System.Linq;
 
 namespace roll20_adv_import_c
@@ -33,6 +33,10 @@ namespace roll20_adv_import_c
             from parry in Parse.AnyChar.Except(TokenArmour).Many().Token().Text()
             from tokenArmour in TokenArmour
             from armour in Parse.Number.Token()
+            from armourrest in Parse.AnyChar
+                .Except(TokenCombatProficiencies)
+                .Except(listParserAdversaries)
+                .Many().Token().Text().Optional() // needed to parse ELWEN who is on two separate pages
             from weaponProf in TokenCombatProficiencies.Then(_ => weapons.Optional())
             from fellAbilities in TokenFellAbilities.Then(_ => fellAbilityList.Optional())
             select new Adversary()
@@ -42,9 +46,9 @@ namespace roll20_adv_import_c
                 attributeLevel = attributeLevel,
                 endurance = endurance,
                 might = might,
-                hate = tokenHateResolve.IsDefined && tokenHateResolve.Get() == "Hate" ?
-                    (hateResolve.IsDefined ? hateResolve.Get() : "") : "",
-                resolve = tokenHateResolve.IsDefined && tokenHateResolve.Get() == "Resolve" ?
+                hate = !tokenHateResolve.IsDefined || !tokenHateResolve.Get().Equals("Hate", StringComparison.OrdinalIgnoreCase) ?
+                    "" : (hateResolve.IsDefined ? hateResolve.Get() : ""),
+                resolve = tokenHateResolve.IsDefined && tokenHateResolve.Get().Equals("Resolve", StringComparison.OrdinalIgnoreCase) ?
                     (hateResolve.IsDefined ? hateResolve.Get() : "") : "",
                 parry = parry,
                 armour = armour,

@@ -4,10 +4,12 @@ namespace roll20_adv_import_c
 {
     public class Config
     {
-        public static void InitAdd(){
+        public static void InitAdd()
+        {
             Config.AdversaryTokenList = AdversaryTokenListAdd;
         }
-        public static void InitCore(){
+        public static void InitCore()
+        {
             Config.AdversaryTokenList = AdversaryTokenListCore;
         }
         public static List<string> AdversaryTokenList;
@@ -32,6 +34,7 @@ namespace roll20_adv_import_c
             , "STONE-TROLL CHIEF"
             , "BARROW-WIGHT"
             , "FELL WRAITH"
+            , "ELWEN FELL WRAITH"
             , "MARSH DWELLERS"
             , "WILD WOLF"
             , "WOLF-CHIEFTAIN"
@@ -230,6 +233,7 @@ namespace roll20_adv_import_c
             , "Bodo Hüsemann"
             , "the north downs"
             , "the weather hills"
+            , "TUTORIAL — BUILDING UP THE CLIMAX"
         };
         public static readonly List<string> FellAbilitiesTokenList = new List<string>{
             "Beast-Tamer.",
@@ -284,28 +288,34 @@ namespace roll20_adv_import_c
             "Hideous Toughness.",
             "Horrible Strength.",
             "Horror of the Wood.",
+            "Howl of Triumph.",
             "Many Poisons.",
             "Mirkwood Dweller.",
             "Paralyzing-Poison.",
             "Poison Blast.",
             "Poisoned Blade.",
+            "Poison.",
             "Prohibition.",
             "Raven Spirits.",
             "Reckless Hate.",
             "Savage Assault.",
             "Seize and Drown.",
+            "Seize Victim.",
             "Shade Caller.",
             "Shadow of Fear.",
             "Sleep.",
             "Snake-Like Speed.",
+            "Snake-like Speed.",
             "Strange Venoms.",
             "Strike Fear.",
+            "Sweeping Stroke.",
             "Terror of Desire.",
             "Thick Hide.",
             "Thing of Terror.",
             "Thrall (Spiders).",
             "Two-Headed.",
             "Two-Headed OR Four-Armed.",
+            "Unliving.",
             "Venomous Breath.",
             "Visions of Torment.",
             "Weak Spot.",
