@@ -56,10 +56,10 @@ namespace roll20_adv_import_c
             select abilities.ToArray();
 
         public static Parser<string> WordParser = Parse.Letter.Many().Token().Or(Parse.String("2-Handed")).Text();
-        public static Parser<string> WordOrMinusParser = 
+        public static Parser<string> WordOrMinusParser =
             Parse.Letter.Or(Parse.Char('-'))
             .Except(TokenAttributeLevel)
-            .Many().Text();
+            .Many().Token().Text();
 
         public static Parser<string> NumberOrMinus =
             from min in Parse.Char('-').Optional()
