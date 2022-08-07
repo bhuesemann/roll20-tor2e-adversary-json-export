@@ -17,8 +17,10 @@ namespace roll20_adv_import_c
             }
             return parser;
         }
+
         public static Parser<string> listParserAdversaries = ListParser(Config.AdversaryTokenList);
         public static Parser<string> listParserFellAbilities = ListParser(Config.FellAbilitiesTokenList);
+        public static Parser<string> listParserAdversariesStart = ListParser(Config.AdversaryTokenListStart);
         public static Parser<string> listParserAdversariesEnd = ListParser(Config.AdversaryEndTokenList);
         public static Parser<string> TokenAttributeLevel = Parse.IgnoreCase("ATTRIBUTE LEVEL").Token().Text();
         public static Parser<string> TokenEndurance = Parse.IgnoreCase("ENDURANCE").Token().Text();
@@ -29,31 +31,6 @@ namespace roll20_adv_import_c
         public static Parser<string> TokenArmour = Parse.IgnoreCase("ARMOUR").Token().Text();
         public static Parser<string> TokenCombatProficiencies = Parse.IgnoreCase("COMBAT PROFICIENCIES:").Token().Text();
         public static Parser<string> TokenFellAbilities = Parse.IgnoreCase("FELL ABILITIES:").Token().Text();
-
-        public static Parser<FellAbility> FellAbilityParser =
-            from fellAbilityName in listParserFellAbilities
-            from fellAbilityDescription in Parse.AnyChar
-                    .Except(listParserFellAbilities)
-                    .Except(TokenAttributeLevel)
-                    .Except(listParserAdversaries)
-                    .Except(listParserAdversariesEnd)
-                    .Many()
-                    .Token()
-                    .Text()
-            select new FellAbility()
-            {
-                abilityname = fellAbilityName.Trim(),
-                description = fellAbilityDescription.Trim()
-            };
-
-        public static Parser<FellAbility[]> fellAbilityList =
-            from abilities in FellAbilityParser.Many()
-            from rest in Parse.AnyChar
-                .Except(TokenAttributeLevel)
-                .Except(listParserAdversaries)
-                .Except(listParserAdversariesEnd)
-                .Many().Token().Text().Optional()
-            select abilities.ToArray();
 
         public static Parser<string> WordParser = Parse.Letter.Many().Token().Or(Parse.String("2-Handed")).Text();
         public static Parser<string> WordOrMinusParser =
@@ -70,6 +47,39 @@ namespace roll20_adv_import_c
             from leading in Parse.Letter.Many().Token().Text()
             from rest in Parse.Chars(' ', '-', ',', ':').Many().Then(_ => WordParser).Many()
             select leading + " " + String.Join(" ", rest);
+
+        public static Parser<string> TokenOrder =
+            from name in PhraseParser
+            from leftpart in Parse.String("(Order #")
+            from ordernumber in Parse.Number.Token()
+            from rightpart in Parse.Char(')')
+            select ordernumber;
+
+        public static Parser<FellAbility> FellAbilityParser =
+            from fellAbilityName in listParserFellAbilities
+            from fellAbilityDescription in Parse.AnyChar
+                    .Except(listParserFellAbilities)
+                    .Except(TokenAttributeLevel)
+                    .Except(TokenOrder)
+                    .Except(listParserAdversaries)
+                    .Except(listParserAdversariesEnd)
+                    .Many()
+                    .Token()
+                    .Text()
+            select new FellAbility()
+            {
+                abilityname = fellAbilityName.Trim(),
+                description = fellAbilityDescription.Trim()
+            };
+
+        public static Parser<FellAbility[]> fellAbilityList =
+            from abilities in FellAbilityParser.Many()
+                // from rest in Parse.AnyChar
+                //     .Except(TokenAttributeLevel)
+                //     .Except(listParserAdversaries)
+                //     .Except(listParserAdversariesEnd)
+                //     .Many().Token().Text().Optional()
+            select abilities.ToArray();
 
         public static Parser<string> DistinctiveFeatureParser =
             from first in WordOrMinusParser
@@ -114,14 +124,13 @@ namespace roll20_adv_import_c
             };
 
         public static Parser<WeaponProficiency[]> weapons =
-             from a in WeaponParser.DelimitedBy(Parse.Chars(',', ' ', '.').Many().Token())
-             from weaponProfRest in Parse.AnyChar
-                 .Except(TokenFellAbilities)
-                 .Except(TokenAttributeLevel)
-                 .Except(listParserAdversaries)
-                 .Except(listParserAdversariesEnd)
-                 .Many().Token().Text().Optional()
-             select a.ToArray();
-
+            from a in WeaponParser.DelimitedBy(Parse.Chars(',', ' ', '.').Many().Token())
+            from weaponProfRest in Parse.AnyChar
+                .Except(TokenFellAbilities)
+                .Except(TokenAttributeLevel)
+                .Except(listParserAdversaries)
+                .Except(listParserAdversariesEnd)
+                .Many().Token().Text().Optional()
+            select a.ToArray();
     }
 }

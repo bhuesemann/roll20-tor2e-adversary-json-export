@@ -230,10 +230,39 @@ namespace roll20_adv_import_c
             , "Wild Wolf"
             , "Wolf-Chieftain"
             , "Hound of Sauron"
-            , "Bodo Hüsemann"
             , "the north downs"
             , "the weather hills"
             , "TUTORIAL — BUILDING UP THE CLIMAX"
+        };
+
+        public static readonly List<string> AdversaryTokenListStart = new List<string>
+        {
+            "asdföljkasfdölkasdföljk" 
+            // "”Southerner Raider"
+            , "ChampionA"
+            , "Orc Soldier"
+            , "Footpad"
+            // , "Ruffian Chief"
+            // , "Highway Robber"
+            // , "orcs of the north"
+            // , "Orc-chieftain"
+            // , "Great Orc Chief"
+            // , "Great Orc Bodyguard"
+            // , "Goblin Archer"
+            // , "Orc Guard"
+            // , "Orc-Soldier"
+            // , "Great Cave-Troll"
+            // , "Cave-troll Slinker"
+            // , "stone-trolls"
+            // , "Stone-Troll Robber"
+            // , "Stone-Troll Chief"
+            // , "Barrow-Wight"
+            // , "Fell Wraith"
+            // , "Marsh-dwellers"
+            // , "werewolves"
+            // , "Wild Wolf"
+            // , "Wolf-Chieftain"
+            // , "Hound of Sauron"
         };
         public static readonly List<string> FellAbilitiesTokenList = new List<string>{
             "Beast-Tamer.",

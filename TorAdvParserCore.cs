@@ -11,9 +11,13 @@ namespace roll20_adv_import_c
             Config.InitCore();
             listParserAdversaries = ListParser(Config.AdversaryTokenList);
         }
-
         private readonly static Parser<Adversary> adv =
-            from leading in Parse.AnyChar.Except(listParserAdversaries).Many()
+            from leading in Parse.AnyChar
+                .Except(listParserAdversariesStart)
+                .Except(listParserAdversaries)
+                .Many().Optional()
+            from description_name in listParserAdversariesStart.Optional()
+            from description in Parse.AnyChar.Except(listParserAdversaries).Many().Token().Text().Optional()
             from name in listParserAdversaries
             from dfeat in DistinctiveFeatureParser.Optional()
             from tokenAttributeLevel in TokenAttributeLevel.Token()
@@ -53,7 +57,8 @@ namespace roll20_adv_import_c
                 parry = parry,
                 armour = armour,
                 weaponProficiencies = weaponProf.IsDefined ? weaponProf.Get() : new WeaponProficiency[0],
-                fellAbilities = fellAbilities.IsDefined ? fellAbilities.Get() : new FellAbility[0]
+                fellAbilities = fellAbilities.IsDefined ? fellAbilities.Get() : new FellAbility[0],
+                description = description.IsDefined ? description.Get() : null,
             };
         public static readonly Parser<Adversary[]> advs =
             from a in adv.DelimitedBy(Parse.AnyChar.Except(listParserAdversaries).Many().Text())
