@@ -10,7 +10,7 @@
     <PublishReadyToRun>true</PublishReadyToRun>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="PdfPig" Version="0.1.6" />
+    <PackageReference Include="PdfPig" Version="0.1.7-alpha-20220703-545d1" />
     <PackageReference Include="sprache" Version="2.3.1" />
   </ItemGroup>
 

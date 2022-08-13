@@ -58,11 +58,12 @@ namespace roll20_adv_import_c
         public static Parser<FellAbility> FellAbilityParser =
             from fellAbilityName in listParserFellAbilities
             from fellAbilityDescription in Parse.AnyChar
-                    .Except(listParserFellAbilities)
                     .Except(TokenAttributeLevel)
-                    .Except(TokenOrder)
                     .Except(listParserAdversaries)
+                    .Except(listParserAdversariesStart)
                     .Except(listParserAdversariesEnd)
+                    .Except(listParserFellAbilities)
+                    .Except(TokenOrder)
                     .Many()
                     .Token()
                     .Text()
@@ -73,13 +74,14 @@ namespace roll20_adv_import_c
             };
 
         public static Parser<FellAbility[]> fellAbilityList =
-            from abilities in FellAbilityParser.Many()
-                // from rest in Parse.AnyChar
-                //     .Except(TokenAttributeLevel)
-                //     .Except(listParserAdversaries)
-                //     .Except(listParserAdversariesEnd)
-                //     .Many().Token().Text().Optional()
-            select abilities.ToArray();
+                from abilities in FellAbilityParser.Many()
+                from rest in Parse.AnyChar
+                    .Except(listParserAdversariesStart)
+                    .Except(TokenAttributeLevel)
+                    .Except(listParserAdversaries)
+                    .Except(listParserAdversariesEnd)
+                    .Many().Token().Text().Optional()
+                select abilities.ToArray();
 
         public static Parser<string> DistinctiveFeatureParser =
             from first in WordOrMinusParser

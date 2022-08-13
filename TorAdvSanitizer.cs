@@ -16,6 +16,7 @@ namespace roll20_adv_import_c
             sanitized = sanitized.Replace("VALTER’S OUTLAWS", "VALTER’S Outlaws");
             sanitized = sanitized.Replace("ElwenFELL WRAITH", "ELWEN FELL WRAITH");
             sanitized = sanitized.Replace("to hit Raenar’s Weak Spot.", "to hit Raenar’s weak spot.");
+            sanitized = sanitized.Replace("…”", "");
             return sanitized;
         }
     }

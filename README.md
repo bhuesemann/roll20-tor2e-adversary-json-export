@@ -1,13 +1,31 @@
-# Roll20 Adversary Importer for The One Ring 2e
+# Roll20 Adversary Exporter for The One Ring 2e
 
-This little project is divided in two parts:
+This little project aims to create JSON files for adversaries listed in PDF files. After JSON conversion this data can be used for personal rpg adventures, e.g. there is an import mechanism for Roll20.
 
-1. Parse and extract a list of all adversaries with their properties from the core rules pdf and save the list as structured JSON.
-2. Use the adversary JSON to help loremasters to select and import adversaries to a Roll20 game as easy as possible.
+Currently the following PDF files are supported:
 
-Please note that due to copyright restrictions we will not include any copyrighted materials. All material is parsed and extracted from the pdf documents and not part of this source code.
+- Official TOR2e Core Rule Book
+- CircleOfNoms adversary compendium based on several Tor1e sources.
 
-# Development
+Please note that due to copyright restrictions we will not include any copyrighted materials (e.g. the PDFs itself). All material is parsed and extracted from the pdf documents and that are not part of this source code.
+
+## HowTo
+
+- Place PDFs
+Please put the PDFs to be parsed in the subdirectory: pdf
+
+- Build and run
+Building from the command line is easy:
+
+``` cmd
+dotnet restore
+dotnet run
+```
+
+- Where to find the JSONs?
+The generated JSON files can be found in the subdirectory: out
+
+## Development
 
 The whole parsing is basend on the excellent framework "Sprache". You can get a good introduction here:
 <https://justinpealing.me.uk/post/2020-03-11-sprache1-chars/>

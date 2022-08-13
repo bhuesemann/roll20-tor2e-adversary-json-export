@@ -17,9 +17,8 @@ namespace roll20_adv_import_c
                     foreach (Page page in document.GetPages())
                     {
                         IReadOnlyList<Letter> letters = page.Letters;
-                        string example = string.Join(string.Empty, letters.Select(x => x.Value));
-                        w.WriteLine(example);
-                        IEnumerable<Word> words = page.GetWords();
+                        string line = string.Join(string.Empty, letters.Select(x => x.Value));
+                        w.WriteLine(line);
                     }
                 }
             }

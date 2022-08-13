@@ -237,9 +237,8 @@ namespace roll20_adv_import_c
 
         public static readonly List<string> AdversaryTokenListStart = new List<string>
         {
-            "asdföljkasfdölkasdföljk" 
-            // "”Southerner Raider"
-            , "ChampionA"
+            "...Southerner Raider"
+            , "Southerner Champion"
             , "Orc Soldier"
             , "Footpad"
             // , "Ruffian Chief"

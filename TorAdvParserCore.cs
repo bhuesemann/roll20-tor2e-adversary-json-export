@@ -51,14 +51,14 @@ namespace roll20_adv_import_c
                 endurance = endurance,
                 might = might,
                 hate = !tokenHateResolve.IsDefined || !tokenHateResolve.Get().Equals("Hate", StringComparison.OrdinalIgnoreCase) ?
-                    "" : (hateResolve.IsDefined ? hateResolve.Get() : ""),
+                    null : (hateResolve.IsDefined ? hateResolve.Get() : null),
                 resolve = tokenHateResolve.IsDefined && tokenHateResolve.Get().Equals("Resolve", StringComparison.OrdinalIgnoreCase) ?
-                    (hateResolve.IsDefined ? hateResolve.Get() : "") : "",
+                    (hateResolve.IsDefined ? hateResolve.Get() : null) : null,
                 parry = parry,
                 armour = armour,
                 weaponProficiencies = weaponProf.IsDefined ? weaponProf.Get() : new WeaponProficiency[0],
                 fellAbilities = fellAbilities.IsDefined ? fellAbilities.Get() : new FellAbility[0],
-                description = description.IsDefined ? description.Get() : null,
+                description = description.IsDefined && description.Get() != "" ? description.Get() : null,
             };
         public static readonly Parser<Adversary[]> advs =
             from a in adv.DelimitedBy(Parse.AnyChar.Except(listParserAdversaries).Many().Text())
