@@ -13,3 +13,7 @@ This is the initial release of the project. Please note that this is an beta rel
 ## [0.1.1] - 2022-08-14
 ### Added
 - Startup and progress messages
+
+## [0.1.2] - 2022-08-14
+### Fixed
+- Single file build
