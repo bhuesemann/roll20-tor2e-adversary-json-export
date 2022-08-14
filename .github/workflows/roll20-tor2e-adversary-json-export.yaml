@@ -79,11 +79,7 @@ jobs:
         type: 'zip'
         filename: 'release.zip'
         path: ${{env.DOTNET_ROOT}}/dist/*
-        
-    - name: Display structure of downloaded files
-      run: ls -R
-      working-directory: ${{env.DOTNET_ROOT}}
-    
+            
     - name: Upload Release Asset
       id: upload_release_asset 
       uses: actions/upload-release-asset@v1
