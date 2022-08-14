@@ -9,12 +9,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 This is the initial release of the project. Please note that this is an beta release to get first feedback. 
 ### Added
 - Everything
-## [0.1.8] - 2022-08-14
-## [0.1.9] - 2022-08-14
-### Fixed
-- rootnamespace
-- exe filename
-
-## [0.1.10] - 2022-08-14
-### Changed
-- Releasenumbering
