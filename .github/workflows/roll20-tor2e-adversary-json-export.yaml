@@ -75,7 +75,17 @@ jobs:
         body: ${{ steps.changelog.outputs.body }}
         draft: false
         prerelease: true
+    
+    - name: Download a single artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: roll20-tor2e-adversary-json-export
+        path: dist
 
+    - name: Display structure of downloaded files
+      run: ls -R
+      working-directory: dist
+    
     - name: Upload Release Asset
       id: upload_release_asset 
       uses: actions/upload-release-asset@v1
@@ -83,6 +93,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: '*.zip'
+        asset_path: 'dist/*.zip'
         asset_name: roll20-tor2e-adversary-json-export
         asset_content_type: application/zip
