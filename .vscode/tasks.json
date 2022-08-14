@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/roll20-adv-import-c.csproj",
+                "${workspaceFolder}/roll20_adv_json_exporter.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/roll20-adv-import-c.csproj",
+                "${workspaceFolder}/roll20_adv_json_exporter.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/roll20-adv-import-c.csproj"
+                "${workspaceFolder}/roll20_adv_json_exporter.csproj",
             ],
             "problemMatcher": "$msCompile"
         }

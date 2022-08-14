@@ -9,3 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 This is the initial release of the project. Please note that this is an beta release to get first feedback. 
 ### Added
 - Everything
+
+## [0.1.1] - 2022-08-14
+### Added
+- Startup and progress messages
