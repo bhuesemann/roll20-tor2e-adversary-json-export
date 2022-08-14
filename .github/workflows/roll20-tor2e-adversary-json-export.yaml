@@ -59,14 +59,10 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: dotnet publish
-      run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/dist
-
-                "${workspaceFolder}/roll20-adv-import-c.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
+      run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/dist -p:PublishProfile=Release
 
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
       with:
-        name: .net-app
+        name: roll20-tor2e-adversary-json-export
         path: ${{env.DOTNET_ROOT}}/dist
