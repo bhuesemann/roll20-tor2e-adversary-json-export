@@ -80,11 +80,10 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: roll20-tor2e-adversary-json-export
-        path: dist
 
     - name: Display structure of downloaded files
       run: ls -R
-      working-directory: dist
+      working-directory: .
     
     - name: Upload Release Asset
       id: upload_release_asset 
