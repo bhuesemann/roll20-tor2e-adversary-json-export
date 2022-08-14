@@ -76,11 +76,13 @@ jobs:
         draft: false
         prerelease: true
     
-    - name: Zip build        
-      uses: montudor/action-zip@v1
+    - name: Archive Release
+      uses: thedoctor0/zip-release@main
       with:
-        args: zip -qq -r release.zip ${{env.DOTNET_ROOT}}/dist
-
+        type: 'zip'
+        filename: 'release.zip'
+        path: ${{env.DOTNET_ROOT}}/dist
+        
     - name: Display structure of downloaded files
       run: ls -R
       working-directory: ${{env.DOTNET_ROOT}}
