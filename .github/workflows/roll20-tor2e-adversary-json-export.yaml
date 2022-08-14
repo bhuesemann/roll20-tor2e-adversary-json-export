@@ -78,7 +78,7 @@ jobs:
       with:
         type: 'zip'
         filename: 'release.zip'
-        path: ${{env.DOTNET_ROOT}}/dist
+        path: ${{env.DOTNET_ROOT}}/dist/*
         
     - name: Display structure of downloaded files
       run: ls -R

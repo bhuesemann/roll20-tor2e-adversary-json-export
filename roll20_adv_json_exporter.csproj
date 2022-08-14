@@ -1,11 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <TargetName>roll20-tor2e-adversary-json-export</TargetName>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>true</SelfContained>
-    <RootNamespace>roll20_adv_import_c</RootNamespace>
+    <RootNamespace>roll20_adv_json_exporter</RootNamespace>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <PublishReadyToRun>true</PublishReadyToRun>
   </PropertyGroup>
