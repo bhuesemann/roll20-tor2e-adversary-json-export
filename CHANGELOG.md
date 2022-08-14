@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
 ## [0.1.0] - 2022-08-14
 This is the initial release of the project. Please note that this is an beta release to get first feedback. 
 ### Added
@@ -17,3 +18,7 @@ This is the initial release of the project. Please note that this is an beta rel
 ## [0.1.2] - 2022-08-14
 ### Fixed
 - Single file build
+
+## [0.1.3] - 2022-08-14
+### Changed
+- README.md

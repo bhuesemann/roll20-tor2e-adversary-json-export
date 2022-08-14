@@ -14,18 +14,59 @@ Please note that due to copyright restrictions we will not include any copyright
 - Place PDFs
 Please put the PDFs to be parsed in the subdirectory: pdf
 
-- Build and run
-Building from the command line is easy:
+- Run
+Execute open a cmd/powershell/terminal and start: roll20_adv_json_exporter.exe
+
+- Where to find the JSONs?
+The generated JSON files can be found in the subdirectory: out
+
+- To take a look at the JSON files I prefer using XIMPLE (http://www.ximple.cz/). It is free for uncommercial use.
+
+## Create Adversary in Roll20
+- Create new Adversary
+- Copy JSON of adversary into the notes section, e.g. 
+
+  {
+    "name": "SAVAGE WOLFDOGS",
+    "distinctiveFeatures": "Wild, Fierce",
+    "attributeLevel": "4",
+    "endurance": "16",
+    "might": "1",
+    "resolve": "4",
+    "parry": "+1",
+    "armour": "2",
+    "weaponProficiencies": [
+      {
+        "weaponname": "Bite",
+        "rating": "2",
+        "damage": "4",
+        "injury": "14",
+        "special": "Pierce"
+      }
+    ],
+    "fellAbilities": [
+      {
+        "abilityname": "Great Leap.",
+        "description": "Spend 1 Resolve to attack any player-hero, in any combat stance including Rearward."
+      }
+    ]
+  }
+- Leave the focus of the notes area (click somewhere else in the sheet)
+- Magic happens
+
+
+## Development
+
+The whole parsing is basend on the excellent framework "Sprache". You can get a good introduction here:
+<https://justinpealing.me.uk/post/2020-03-11-sprache1-chars/>
+
+- Building manually
+Clone the git repo and bild from the command line:
 
 ``` cmd
 dotnet restore
 dotnet run
 ```
 
-- Where to find the JSONs?
-The generated JSON files can be found in the subdirectory: out
-
-## Development
-
-The whole parsing is basend on the excellent framework "Sprache". You can get a good introduction here:
-<https://justinpealing.me.uk/post/2020-03-11-sprache1-chars/>
+- Development
+Install Visual Source Code and install everything needed for a c# project. 
