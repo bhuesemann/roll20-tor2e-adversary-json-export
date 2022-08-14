@@ -77,8 +77,9 @@ jobs:
         prerelease: true
     
     - name: Zip build        
-      run: |          
-        cd ${{env.DOTNET_ROOT}}/dist && zip -r ../release.zip ./*
+      uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r release.zip ${{env.DOTNET_ROOT}}/dist
 
     - name: Display structure of downloaded files
       run: ls -R
@@ -92,5 +93,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
         asset_path: 'release.zip'
-        asset_name: roll20-tor2e-adversary-json-export.zip
+        asset_name: myproject.build.${{steps.releasenr.outputs.body}}.zip
         asset_content_type: application/zip
