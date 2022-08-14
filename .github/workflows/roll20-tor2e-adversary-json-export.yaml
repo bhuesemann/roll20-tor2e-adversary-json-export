@@ -10,25 +10,6 @@ on:
       - '**/*.md'
       - '**/*.gitignore'
       - '**/*.gitattributes'
-  pull_request:
-    branches:
-      - master
-    tags:
-      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
-    paths-ignore:
-      - '**/*.md'
-      - '**/*.gitignore'
-      - '**/*.gitattributes'
-  workflow_dispatch:
-    branches:
-      - master
-    tags:
-      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10    
-    paths-ignore:
-      - '**/*.md'
-      - '**/*.gitignore'
-      - '**/*.gitattributes'
-      
 jobs:
   build:
     name: Build 
@@ -78,13 +59,18 @@ jobs:
       run: |
         echo "::set-output name=body::$(cat CHANGELOG.md)"
 
+    - name: Read Releasenr
+      id: releasenr
+      run: |
+        echo "::set-output name=body::$(cat RELEASE)"
+
     - name: Create Release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        tag_name: Tag ${{ steps.releasenr.outputs.body }}
+        release_name: Release ${{ steps.releasenr.outputs.body }}
         body: ${{ steps.changelog.outputs.body }}
         draft: false
         prerelease: true
