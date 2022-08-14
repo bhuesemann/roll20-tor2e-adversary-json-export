@@ -78,8 +78,8 @@ jobs:
     
     - name: Zip build        
       uses: montudor/action-zip@v1
-        with:
-          args: zip -qq -r release.zip ${{env.DOTNET_ROOT}}/dist
+      with:
+        args: zip -qq -r release.zip ${{env.DOTNET_ROOT}}/dist
 
     - name: Display structure of downloaded files
       run: ls -R
