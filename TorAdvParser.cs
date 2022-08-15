@@ -50,7 +50,7 @@ namespace roll20_adv_import_c
 
         public static Parser<string> TokenOrder =
             from name in PhraseParser
-            from leftpart in Parse.String("(Order #")
+            from leftpart in Parse.String("(Order #").Or(Parse.String("(order #"))
             from ordernumber in Parse.Number.Token()
             from rightpart in Parse.Char(')')
             select ordernumber;

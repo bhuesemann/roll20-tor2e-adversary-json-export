@@ -22,3 +22,8 @@ This is the initial release of the project. Please note that this is an beta rel
 ## [0.1.3] - 2022-08-14
 ### Changed
 - README.md
+
+## [0.1.5] - 2022-08-15
+### Fixed
+- parsing order tags
+
