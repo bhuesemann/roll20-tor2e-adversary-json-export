@@ -27,3 +27,6 @@ This is the initial release of the project. Please note that this is an beta rel
 ### Fixed
 - parsing order tags
 
+## [0.1.6] - 2022-08-21
+### Changed
+- parsing core rules for updated pdf version 2203
