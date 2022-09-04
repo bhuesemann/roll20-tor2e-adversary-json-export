@@ -12,8 +12,6 @@ namespace roll20_adv_import_c
         {
             Config.AdversaryTokenList = AdversaryTokenListCore;
         }
-        public static List<string> AdversaryTokenList;
-
         public static readonly List<string> AdversaryTokenListCore = new List<string> {
             // Core
             "SOUTHERNER RAIDER"
@@ -356,5 +354,61 @@ namespace roll20_adv_import_c
             "Wrapped in Shadow.",
             "Yell of Triumph.",
         };
+        public static readonly List<string> RolltablesTokenList = new List<string>
+        {
+            "EXPERIENCE MILESTONES",
+            "ILL-­F ORTUNETABLE",
+            "FORTUNE TABLE",
+            "TELLING TABLE",
+            "FEAT DIE:1",
+            "FEAT DIE:2",
+            "FEAT DIE:3",
+            "FEAT DIE:4",
+            "FEAT DIE:5",
+            "FEAT DIE:6",
+            "FEAT DIE:7",
+            "FEAT DIE:8",
+            "FEAT DIE:9",
+            "FEAT DIE:10",
+            "FEAT DIE:11",
+            "FEAT DIE:12",
+            "SKILL SPECIAL SUCCESS TABLE",
+            "RISK LEVELS",
+            "SOLO JOURNEY EVENTS",
+            "EVENT DETAIL: TERRIBLE MISFORTUNE",
+            "EVENT DETAIL: DESPAIR",
+            "EVENT DETAIL: ILL CHOICES",
+            "EVENT DETAIL: SHORT CUT",
+            "EVENT DETAIL: MISHAP",
+            "EVENT DETAIL: CHANCE MEETING",
+            "EVENT DETAIL: JOYFUL SIGHT",
+            "REVELATION EPISODE TABLE",
+            "HUNT THRESHOLD REGION TABLE",
+            "HUNT MODIFIERS TABLE",
+            "PATRON QUESTS: BALIN, SON OF FUNDIN",
+            "PATRON QUESTS: BILBO BAGGINS",
+            "PATRON QUESTS: GANDALF THE GREY",
+            "PATRON QUESTS: CIRDAN THE SHIPWRIGHT",
+            "PATRON QUESTS: GILRAEN, DAUGHTER OF DIRHAEL",
+            "PATRON QUESTS: TOM BOMBADIL AND LADY GOLDBERRY",
+        };
+        public static readonly List<string> RolltableColHeaderList = new List<string>
+        {
+            "SUCCESS DIEACTIONASPECTFOCUS",
+            "MILESTONEREWARD",
+            "FEAT DIERESULT",
+            "CHANCEROLL A FEAT DIE.  THE ANSWER IS YES IF YOU ROLL...",
+            "SUCCESS DIEQUEST",
+            "SPEND 1 SUCCESS ICON TO…DESCRIPTION",
+            "RISK LEVELTHE FAILED ROLL RESULTS IN…EXAMPLES",
+            "FEAT DIEEVENTCONSEQUENCES OF THE SKILL ROLLFATIGUE POINTS GAINED",
+            "SUCCESS DIEEVENTOUTCOME",
+            "THE REGION TRAVERSED IS A…HUNT THRESHOLD",
+            "HUNT MODIFIERDESCRIPTION",
+            "FEAT DIEEPISODE",
+            "SUCCESS DIEQUEST",
+        };
+        public static List<string> AdversaryTokenList = AdversaryTokenListCore;
+
     }
 }

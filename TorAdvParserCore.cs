@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace roll20_adv_import_c
 {
-    public class TorAdvParserCore : TorAdvParser
+    public class TorAdvParserCore : TorParser
     {
         public static void Init()
         {

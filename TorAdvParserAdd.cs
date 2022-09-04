@@ -1,10 +1,9 @@
 using Sprache;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace roll20_adv_import_c
 {
-    public class TorAdvParserAdd : TorAdvParser
+    public class TorAdvParserAdd : TorParser
     {
         public static void Init()
         {
