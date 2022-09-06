@@ -28,11 +28,7 @@ namespace roll20_adv_import_c
                 add2 = add2.IsDefined ? add2.Get() : null,
             };
         private static Parser<RolltableRow[]> tablerows =
-            from a in tablerow.DelimitedBy(Parse.AnyChar
-                .Except(listParserTables)
-                .Except(TokenOrder)
-                .Except(Parse.Number)
-                .Many().Text()).Optional()
+            from a in tablerow.Many().Optional()
             select a.GetOrElse(new RolltableRow[] { }).ToArray();
 
         private static Parser<Rolltable> tab =
