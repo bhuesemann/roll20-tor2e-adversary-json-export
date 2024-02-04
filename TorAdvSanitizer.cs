@@ -29,6 +29,9 @@ namespace roll20_adv_import_c
             sanitized = sanitized.Replace("ElwenFELL WRAITH", "ELWEN FELL WRAITH");
             sanitized = sanitized.Replace("to hit Raenar’s Weak Spot.", "to hit Raenar’s weak spot.");
             sanitized = sanitized.Replace("…”", "");
+            // StriderMode
+            sanitized = sanitized.Replace("FEAT DIE: SUCCESS DIEACTIONASPECTFOCUS1Abandon", "FEAT DIE11: SUCCESS DIEACTIONASPECTFOCUS1Abandon");
+            sanitized = sanitized.Replace("FEAT DIE: SUCCESS DIEACTIONASPECTFOCUS1Believe", "FEAT DIE12: SUCCESS DIEACTIONASPECTFOCUS1Believe");
             return sanitized;
         }
     }

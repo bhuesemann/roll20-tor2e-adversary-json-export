@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace roll20_adv_import_c
 {
-    public class TorAdvParser
+    public class TorParser
     {
 
         public static Parser<string> ListParser(List<string> lst)
