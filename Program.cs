@@ -46,6 +46,11 @@ namespace roll20_adv_import_c
                         TorStriderParser.Init();
                         tabs = TorStriderParser.tabs.Parse(sanitized);
                     }
+                    else if (basename.Contains("Tales"))
+                    {
+                        TorAdvParserTales.Init();
+                        advs = TorAdvParserTales.advs.Parse(sanitized);
+                    }
                     else
                     {
                         TorAdvParserCore.Init();

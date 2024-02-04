@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - fixed parsing of the core rules for updated pdf version 2401
 - updated parsing for CircleOfNoms Adversary PDF
+- started parsing of Strider Mode
 ## [0.1.6] - 2022-08-21
 ### Changed
 - fixed parsing of the core rules for updated pdf version 2203

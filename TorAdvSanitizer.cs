@@ -18,6 +18,11 @@ namespace roll20_adv_import_c
             sanitized = sanitized.Replace("W- W", "W-W");// added for core's 2024 version
             sanitized = sanitized.Replace("F- C", "F-C");// added for core's 2024 version
             sanitized = sanitized.Replace("T- K", "T-K");// added for core's 2024 version
+            sanitized = sanitized.Replace("Bitten — works like Seize, but the victim also loses 2 Endurance", "Bitten works like Seize, but the victim also loses two Endurance");
+            sanitized = sanitized.Replace("HUNTING THE FASTITOCALON", "HUNTING THE HUNTING THE FASTITOCALN");
+            sanitized = sanitized.Replace("OSMER THE “WIZARD”", "OSMER THE WIZARD");
+            sanitized = sanitized.Replace("fight.12", "fight.");
+            sanitized = sanitized.Replace("WORM- WIGHTFierce, Vengeful", "WORM-WIGHTFierce, Vengeful");
             sanitized = sanitized.Replace("ends. CORRUPTED DWARF", "ends. CORRUPTED DWARFS");
             sanitized = sanitized.Replace("sight. EASTERLING WARRIOR", "sight. EASTERLING-WARRIOR");
             sanitized = sanitized.Replace("Iron-Folk. DUNLENDING WARRIORS", "Iron-Folk. DUNLENDING-WARRIORS");

@@ -12,6 +12,12 @@ namespace roll20_adv_import_c
         {
             Config.AdversaryTokenList = AdversaryTokenListCore;
         }
+
+        public static void InitTales()
+        {
+            Config.AdversaryTokenList = AdversaryTokenListTales;
+        }
+
         public static readonly List<string> AdversaryTokenListCore = new List<string> {
             // Core
             "SOUTHERNER RAIDER"
@@ -40,6 +46,20 @@ namespace roll20_adv_import_c
             , "THE WIGHT-KING"
             , "BÚRZGUL"
             , "ASH"
+        };
+        public static readonly List<string> AdversaryTokenListTales = new List<string> {
+            // Tales from the Lone Lands
+            "NELLY LONGARMS"
+            , "VAMPIRE BATS"
+            , "WOOD- WIGHTS"
+            , "LOSSOTH HUNTER"
+            , "FASTITOCALON"
+            , "OSMER THE WIZARD"
+            , "LONG- DEAD GWENDAITH"
+            , "HULTMAR MANYHANDED"
+            , "SNAVA THE ORC"
+            , "HILL- WIGHT"
+            , "WORM-WIGHT"
         };
         public static readonly List<string> AdversaryTokenListAdd = new List<string> {
             // Additional
@@ -242,6 +262,12 @@ namespace roll20_adv_import_c
             , "the north downs"
             , "the weather hills"
             , "TUTORIAL — BUILDING UP THE CLIMAX"
+            // Tales of the Lone Lands
+            , "EAGRE’S TALE"
+            , "NEW FELLOWSHIP UNDERTAKING: JOURNEY TO THE STONE"
+            , "Schemes and Trouble"
+            , "DEFEATING THE DARKNESS"
+            , "♦The hero with the heaviest burden"
         };
 
         public static readonly List<string> AdversaryTokenListStart = new List<string>
@@ -299,10 +325,12 @@ namespace roll20_adv_import_c
             "Enthrall.",
             "Fear of Fire.",
             "Feast on Suffering.",
+            "Fell Presence.",
             "Fell Speed.",
             "Fierce.",
             "Fierce Folk.",
             "Fire Breath.",
+            "Fireworks!",
             "Formidable.",
             "Foul Reek.",
             "Four-Armed.",
@@ -325,11 +353,13 @@ namespace roll20_adv_import_c
             "Heartless.",
             "Heartless:",
             "Hideous Toughness.",
+            "Horrible Hands.",
             "Horrible Strength.",
             "Horror of the Wood.",
             "Howl of Triumph.",
             "Many Poisons.",
             "Mirkwood Dweller.",
+            "Mother Knows Best.",
             "Paralyzing-Poison.",
             "Poison Blast.",
             "Poisoned Blade.",
@@ -347,6 +377,7 @@ namespace roll20_adv_import_c
             "Snake-like Speed.",
             "Strange Venoms.",
             "Strike Fear.",
+            "Sudden Strike.",
             "Sweeping Stroke.",
             "Terror of Desire.",
             "Thick Hide.",
