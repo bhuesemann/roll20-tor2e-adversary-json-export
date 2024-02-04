@@ -6,9 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.7] - 2024-02-04
+### Changed
+- fixed parsing of the core rules for updated pdf version 2401
+- updated parsing for CircleOfNoms Adversary PDF
 ## [0.1.6] - 2022-08-21
 ### Changed
-- parsing core rules for updated pdf version 2203
+- fixed parsing of the core rules for updated pdf version 2203
 ## [0.1.5] - 2022-08-15
 ### Fixed
 - parsing order tags

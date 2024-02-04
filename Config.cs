@@ -112,7 +112,7 @@ namespace roll20_adv_import_c
             , "HIRDAN, BANDIT LEADER [E]"
             , "MALTHOR, THE AXE-BITTEN [E]"
             , "GAZHUR THREE-DEATHS [E]"
-            , "THUGS"
+            , "BRUTAL THUGS"
             , "THE THING IN THE WELL"
             , "NIGHT-WIGHT"
             , "VALTER THE BLOODY"
@@ -141,7 +141,7 @@ namespace roll20_adv_import_c
             , "CARADOG, DUNLENDING HUNTER"
             , "UATACH"
             , "ARMED MEN"
-            , "DUNLENDING WARRIORS"
+            , "DUNLENDING-WARRIORS"
             , "ARMED VILLAGERS"
             , "ELWIN"
             , "FAY"
@@ -194,6 +194,17 @@ namespace roll20_adv_import_c
             , "TYULQIN THE WEAVER"
             , "SARQIN, THE MOTHER-OF-ALL"
             , "TAULER THE HUNTER"
+            // added 2024-02-04
+            , "ELDER VAMPIRE [E]"
+            , "EASTERLING-WARRIOR"
+            , "EASTERLING CAPTAIN [E]"
+            , "EASTERLING RAIDER"
+            , "EASTERLING SORCERER [D]"
+            , "CORRUPTED DWARFS"
+            , "CORRUPTED DWARF WARRIOR"
+            , "CORRUPTED DWARF VETERAN [E]"
+            , "NAZGUL"
+            , "THUGS-TRIO"
         };
         public static readonly List<string> AdversaryEndTokenList = new List<string> {
             // Additional
