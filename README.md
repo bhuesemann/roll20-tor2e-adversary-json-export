@@ -68,5 +68,10 @@ dotnet restore
 dotnet run
 ```
 
+- Publish manually
+``` cmd
+dotnet publish -c Release --property:./dist -p:PublishProfile=Release
+```
+
 - Development
 Install Visual Source Code and install everything needed for a c# project. 

@@ -44,7 +44,7 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: dotnet publish
-      run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/dist -p:PublishProfile=Release
+      run: dotnet publish -c Release --property:PublishDir=${{env.DOTNET_ROOT}}/dist -p:PublishProfile=Release
 
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
