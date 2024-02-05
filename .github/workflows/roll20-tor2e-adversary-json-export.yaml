@@ -44,13 +44,13 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: dotnet publish
-      run: dotnet publish -c Release --property:PublishDir=${{env.DOTNET_ROOT}}/dist -p:PublishProfile=Release
+      run: dotnet publish -c Release --property:PublishDir="${{env.GITHUB_WORKSPACE}}/dist" -p:PublishProfile=Release
 
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
       with:
         name: roll20-tor2e-adversary-json-export
-        path: ${{env.DOTNET_ROOT}}/dist
+        path: "${{env.GITHUB_WORKSPACE}}/dist"
 
     - name: Extract release notes
       id: extract-release-notes
@@ -78,7 +78,7 @@ jobs:
       with:
         type: 'zip'
         filename: 'release.zip'
-        path: ${{env.DOTNET_ROOT}}/dist/*
+        path: "${{env.GITHUB_WORKSPACE}}/dist/*"
             
     - name: Upload Release Asset
       id: upload_release_asset 
