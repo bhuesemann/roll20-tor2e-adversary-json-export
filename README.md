@@ -68,6 +68,13 @@ dotnet restore
 dotnet run
 ```
 
+- Publich github pipeline
+-- edit release nr. in RELEASE
+``` cmd
+git tag <version>
+git push --tags --force
+```
+
 - Publish manually
 ``` cmd
 dotnet publish -c Release --property:./dist -p:PublishProfile=Release
