@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fixed parsing of the core rules for updated pdf version 2401
 - updated parsing for CircleOfNoms Adversary PDF
 - started parsing of Strider Mode
+- added support for Tales of the Lone Lands
 ## [0.1.6] - 2022-08-21
 ### Changed
 - fixed parsing of the core rules for updated pdf version 2203
