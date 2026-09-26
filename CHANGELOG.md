@@ -13,6 +13,7 @@ Releases up to and including 0.1.8 are the original work of [bhuesemann](https:/
 - Upgraded from .NET 6 to .NET 10 (LTS); the release build now uses the .NET 10 SDK
 - Updated PdfPig from 0.1.7-alpha to 0.1.16 and YamlDotNet from 13.7.1 to 18.1.0
 - Generated JSON and YAML output is unchanged
+- Release workflow now uses the GitHub CLI instead of the archived `create-release`/`upload-release-asset` actions
 
 ## [0.2.0] - 2026-09-26
 ### Added

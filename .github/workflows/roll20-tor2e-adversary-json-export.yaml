@@ -12,6 +12,8 @@ jobs:
   build:
     name: Build 
     runs-on: windows-latest
+    permissions:
+      contents: write
     env:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
@@ -44,49 +46,36 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: dotnet publish
-      run: dotnet publish -c Release --property:PublishDir="${{env.GITHUB_WORKSPACE}}/dist" -p:PublishProfile=Release
+      run: dotnet publish -c Release --property:PublishDir="${{ github.workspace }}/dist" -p:PublishProfile=Release
 
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v4
       with:
         name: roll20-tor2e-adversary-json-export
-        path: "${{env.GITHUB_WORKSPACE}}/dist"
+        path: "${{ github.workspace }}/dist"
 
     - name: Extract release notes
       id: extract-release-notes
-      uses: ffurrer2/extract-release-notes@v1
+      uses: ffurrer2/extract-release-notes@v2
 
     - name: Read Releasenr
       id: releasenr
-      run: |
-        echo "::set-output name=body::$(cat RELEASE)"
+      shell: bash
+      run: echo "version=$(cat RELEASE)" >> "$GITHUB_OUTPUT"
+
+    - name: Archive Release
+      shell: pwsh
+      run: Compress-Archive -Path "${{ github.workspace }}/dist/*" -DestinationPath "roll20-tor2e-adversary-json-export.${{ steps.releasenr.outputs.version }}.zip"
 
     - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
+      shell: bash
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-      with:
-        tag_name: ${{ steps.releasenr.outputs.body }}
-        release_name: Release ${{ steps.releasenr.outputs.body }}
-        body: ${{ steps.extract-release-notes.outputs.release_notes }}
-        draft: false
-        prerelease: true
-    
-    - name: Archive Release
-      uses: thedoctor0/zip-release@main
-      with:
-        type: 'zip'
-        filename: 'release.zip'
-        path: "${{env.GITHUB_WORKSPACE}}/dist/*"
-            
-    - name: Upload Release Asset
-      id: upload_release_asset 
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: 'release.zip'
-        asset_name: roll20-tor2e-adversary-json-export.${{steps.releasenr.outputs.body}}.zip
-        asset_content_type: application/zip
+        GH_TOKEN: ${{ github.token }}
+        VERSION: ${{ steps.releasenr.outputs.version }}
+        RELEASE_NOTES: ${{ steps.extract-release-notes.outputs.release_notes }}
+      run: |
+        printf '%s\n' "$RELEASE_NOTES" > release-notes.md
+        gh release create "$VERSION" "roll20-tor2e-adversary-json-export.$VERSION.zip" \
+          --title "Release $VERSION" \
+          --notes-file release-notes.md \
+          --prerelease
