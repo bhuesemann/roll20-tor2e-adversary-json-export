@@ -82,12 +82,15 @@ dotnet restore
 dotnet run
 ```
 
-- Publich github pipeline
--- edit release nr. in RELEASE
-``` cmd
-git tag <version>
-git push --tags --force
+- Publish a release via the github pipeline
+-- add release notes under `## [Unreleased]` in CHANGELOG.md and commit them
+-- run the release script from `master` (requires PowerShell 7):
+``` powershell
+./release.ps1 <version>          # e.g. ./release.ps1 0.2.2
+./release.ps1 <version> -WhatIf  # dry run
+./release.ps1 <version> -NoPush  # commit and tag locally only
 ```
+The script moves the unreleased notes into a dated section for the version, updates RELEASE, builds, commits, tags and pushes. Pushing the tag starts the release workflow.
 
 - Publish manually
 ``` cmd
