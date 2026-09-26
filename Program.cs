@@ -21,14 +21,16 @@ namespace roll20_adv_import_c
             else
             {
                 Console.WriteLine("Found files: " + filePaths.Length);
+                Directory.CreateDirectory(@"./out/json");
+                Directory.CreateDirectory(@"./out/yaml");
 
                 foreach (string pdfPath in filePaths)
                 {
                     // pdf conversion 
                     string basename = Path.GetFileName(pdfPath).Replace(Path.GetExtension(pdfPath), "");
-                    string txtPath = @$"./out/{basename}.txt";
-                    string jsonPath = @$"./out/{basename}.json";
-                    string yamlPath = @$"./out/{basename}.yaml";
+                    string txtPath = Path.GetTempFileName();
+                    string jsonPath = @$"./out/json/{basename}.json";
+                    string yamlPath = @$"./out/yaml/{basename}.yaml";
 
                     Console.WriteLine("Processing file: " + basename);
 
@@ -114,7 +116,20 @@ namespace roll20_adv_import_c
                         ISerializer yamlSerializer = new SerializerBuilder()
                             .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull)
                             .Build();
-                        string yamlString = yamlSerializer.Serialize(parsed);
+                        string yamlString;
+                        if (advs == null)
+                        {
+                            yamlString = yamlSerializer.Serialize(tabs);
+                        }
+                        else
+                        {
+                            // each adversary as its own flat top-level document, separated
+                            // by a blank line, instead of one YAML list of entries
+                            IEnumerable<string> yamlBlocks = advs
+                                .Select(AdversaryYaml.FromAdversary)
+                                .Select(a => yamlSerializer.Serialize(a).TrimEnd('\n'));
+                            yamlString = string.Join("\n\n", yamlBlocks) + "\n";
+                        }
                         File.WriteAllText(yamlPath, yamlString);
 
                         // analyse result and provide feedback for advs
@@ -145,6 +160,14 @@ namespace roll20_adv_import_c
                     catch (Exception ex)
                     {
                         Console.WriteLine($"Failed to process {basename}: {ex.Message}");
+                    }
+                    finally
+                    {
+                        // intermediate raw text extraction, not needed once conversion is done
+                        if (File.Exists(txtPath))
+                        {
+                            File.Delete(txtPath);
+                        }
                     }
                 }
                 Console.WriteLine("Processing completed!");

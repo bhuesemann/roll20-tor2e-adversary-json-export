@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 using Sprache;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,6 +56,15 @@ namespace roll20_adv_import_c
             from rightpart in Parse.Char(')')
             select ordernumber;
 
+        // a page-break heading glued directly onto trailing text (no space) shows up as a
+        // period immediately followed by a lowercase letter, e.g. "Favoured.greenholmMore";
+        // truncate there since real sentences always have a space after a period
+        public static string TrimGluedHeading(string text)
+        {
+            Match match = Regex.Match(text, @"\.[a-z]");
+            return match.Success ? text.Substring(0, match.Index + 1).Trim() : text.Trim();
+        }
+
         public static Parser<FellAbility> FellAbilityParser =
             from fellAbilityName in listParserFellAbilities
             from fellAbilityDescription in Parse.AnyChar
@@ -70,7 +80,7 @@ namespace roll20_adv_import_c
             select new FellAbility()
             {
                 abilityname = fellAbilityName.Trim(),
-                description = fellAbilityDescription.Trim()
+                description = TrimGluedHeading(fellAbilityDescription)
             };
 
         public static Parser<FellAbility[]> fellAbilityList =

@@ -1,6 +1,6 @@
 # Roll20 Adversary Exporter for The One Ring 2e
 
-This little project aims to create JSON and YAML files for adversaries listed in PDF files. After conversion this data can be used for personal rpg adventures, e.g. there is an import mechanism for Roll20. YAML output was added so the same adversary data can also be used as notes in [Obsidian](https://obsidian.md/).
+This little project aims to create JSON and YAML files for adversaries listed in PDF files. After conversion this data can be used for personal rpg adventures, e.g. there is an import mechanism for Roll20. YAML output was added so the same adversary data can also be used with the [Obsidian "The One Ring 2E Statblocks" plugin](https://github.com/modality/obsidian-the-one-ring-2e-statblocks) (`tor2e` code blocks).
 
 > This is a fork of [bhuesemann/roll20-tor2e-adversary-json-export](https://github.com/bhuesemann/roll20-tor2e-adversary-json-export), maintained by [telimektar3](https://github.com/telimektar3/roll20-tor2e-adversary-json-export). All functionality through release 0.1.8 is the original work of bhuesemann; the YAML output and all newly-supported PDF sources starting with release 0.2.0 (see [CHANGELOG.md](CHANGELOG.md)) were added in this fork.
 
@@ -32,7 +32,7 @@ Please put the PDFs to be parsed in the subdirectory: pdf
 Execute open a cmd/powershell/terminal and start: roll20_adv_json_exporter.exe
 
 - Where to find the JSONs?
-The generated JSON and YAML files can be found in the subdirectory: out. The YAML files can be dropped straight into an Obsidian vault as notes.
+The generated JSON files are in out/json and the generated YAML files are in out/yaml. The YAML files match the schema expected by the Obsidian "The One Ring 2E Statblocks" plugin (name, description, features, level, endurance, might, hate/resolve, parry, armour, proficiencies, abilities), with special damage types and Fell Abilities already formatted as Obsidian wiki-links (e.g. `[[Fell Abilities#Fierce|Fierce]]`).
 
 - To take a look at the JSON files I prefer using XIMPLE (http://www.ximple.cz/). It is free for uncommercial use.
 
