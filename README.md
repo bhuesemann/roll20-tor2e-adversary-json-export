@@ -1,11 +1,25 @@
 # Roll20 Adversary Exporter for The One Ring 2e
 
-This little project aims to create JSON files for adversaries listed in PDF files. After JSON conversion this data can be used for personal rpg adventures, e.g. there is an import mechanism for Roll20.
+This little project aims to create JSON and YAML files for adversaries listed in PDF files. After conversion this data can be used for personal rpg adventures, e.g. there is an import mechanism for Roll20. YAML output was added so the same adversary data can also be used with the [Obsidian "The One Ring 2E Statblocks" plugin](https://github.com/modality/obsidian-the-one-ring-2e-statblocks) (`tor2e` code blocks).
+
+> This is a fork of [bhuesemann/roll20-tor2e-adversary-json-export](https://github.com/bhuesemann/roll20-tor2e-adversary-json-export), maintained by [telimektar3](https://github.com/telimektar3/roll20-tor2e-adversary-json-export). All functionality through release 0.1.8 is the original work of bhuesemann; the YAML output and all newly-supported PDF sources starting with release 0.2.0 (see [CHANGELOG.md](CHANGELOG.md)) were added in this fork.
 
 Currently the following PDF files are supported:
 
 - Official TOR2e Core Rule Book
 - CircleOfNoms adversary compendium based on several Tor1e sources.
+- Official TOR2e Tales from the Lone-lands
+- Official TOR2e Strider Mode (roll tables only)
+- Official TOR2e Hands of the White Wizard
+- Official TOR2e Moria - Through the Doors of Durin
+- Official TOR2e Realms of the Three Rings
+- Official TOR2e Ruins of the Lost Realm
+- Official TOR2e Starter Set - The Shire
+- Official TOR2e Starter Set - The Adventures
+- Official TOR2e Starter Set 2 - Adventure booklet
+- The Old Dwarf-mines (excerpt)
+
+Note: Rivendell (Loremaster's Screen & Rivendell Compendium) and Peoples of Wilderland are lore/culture supplements with no adversary stat blocks, so there is nothing for this tool to extract from them.
 
 Please note that due to copyright restrictions we will not include any copyrighted materials (e.g. the PDFs itself). All material is parsed and extracted from the pdf documents and that are not part of this source code.
 
@@ -18,7 +32,7 @@ Please put the PDFs to be parsed in the subdirectory: pdf
 Execute open a cmd/powershell/terminal and start: roll20_adv_json_exporter.exe
 
 - Where to find the JSONs?
-The generated JSON files can be found in the subdirectory: out
+The generated JSON files are in out/json and the generated YAML files are in out/yaml. The YAML files match the schema expected by the Obsidian "The One Ring 2E Statblocks" plugin (name, description, features, level, endurance, might, hate/resolve, parry, armour, proficiencies, abilities), with special damage types and Fell Abilities already formatted as Obsidian wiki-links (e.g. `[[Fell Abilities#Fierce|Fierce]]`).
 
 - To take a look at the JSON files I prefer using XIMPLE (http://www.ximple.cz/). It is free for uncommercial use.
 
