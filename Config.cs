@@ -18,6 +18,41 @@ namespace roll20_adv_import_c
             Config.AdversaryTokenList = AdversaryTokenListTales;
         }
 
+        public static void InitHands()
+        {
+            Config.AdversaryTokenList = AdversaryTokenListHands;
+        }
+
+        public static void InitMoria()
+        {
+            Config.AdversaryTokenList = AdversaryTokenListMoria;
+        }
+
+        public static void InitRealms()
+        {
+            Config.AdversaryTokenList = AdversaryTokenListRealms;
+        }
+
+        public static void InitRuins()
+        {
+            Config.AdversaryTokenList = AdversaryTokenListRuins;
+        }
+
+        public static void InitShire()
+        {
+            Config.AdversaryTokenList = AdversaryTokenListShire;
+        }
+
+        public static void InitSS2Adventure()
+        {
+            Config.AdversaryTokenList = AdversaryTokenListSS2Adventure;
+        }
+
+        public static void InitStarterAdventures()
+        {
+            Config.AdversaryTokenList = AdversaryTokenListStarterAdventures;
+        }
+
         public static readonly List<string> AdversaryTokenListCore = new List<string> {
             // Core
             "SOUTHERNER RAIDER"
@@ -60,6 +95,127 @@ namespace roll20_adv_import_c
             , "SNAVA THE ORC"
             , "HILL- WIGHT"
             , "WORM-WIGHT"
+        };
+        public static readonly List<string> AdversaryTokenListHands = new List<string> {
+            // Hands of the White Wizard
+            "DUNWALLA"
+            , "SNOW- TROLL"
+            , "THE BEITHIR"
+            , "SEA-PRINCE GUARD"
+            , "NAMBAR, THE SEA-PRINCE"
+            , "BAUGRIM"
+            , "BLACK URUK SOLDIER"
+            , "LIGHTROOT"
+            , "ZORIL"
+            , "USAPTHON"
+            , "THE WATCHER IN THE WATER"
+            , "GORGOL"
+            , "KINIR THE RING- WIGHT"
+            , "RANGER OF ITHILIEN"
+            , "HELEDIRIEN"
+            , "HILL- TROLL"
+            , "RINGWRAITH"
+            , "SHELOB"
+            , "SARUMAN OF MANY COLOURS, REVEALED"
+        };
+        public static readonly List<string> AdversaryTokenListMoria = new List<string> {
+            // Moria - Through the Doors of Durin
+            "UDÛN- ORC FANATIC"
+            , "UDÛN- ORC FIRE-TOUCHED"
+            , "BLACK URUK CAPTAIN"
+            , "BLACK URUK"
+            , "MESSENGER OF LUGBÚRZ"
+            , "DWARVEN THRALL"
+            , "DURIN’S BANE"
+            , "ASH- WRAITH"
+            , "GREAT CARRION BAT"
+            , "MARROW-EATER"
+            , "STONE TOAD"
+            , "MOCKER CRAWE"
+            , "REEKBAT"
+            , "BLOOD-VINE"
+            , "HAGROT THE SNEAK"
+            , "ANGOLATH"
+            , "YAGUL"
+            , "UFTAK"
+            , "MALECH ONE-EYE"
+            , "RED-NAILS"
+            , "HAR, WOULD-BE LORD  OF MORIA"
+            , "SPIRITS OF SHADOW"
+            , "NAGLUR, SWORD OF SAURON"
+            , "STONE GHOST"
+            , "RING-WIGHT"
+            , "THE MAULER"
+            , "INVISIBLE GOBLINS"
+            , "THU THE FIRESPEAKER"
+            , "SHAGRAM"
+            , "THE WATCHER IN THE WATER"
+            , "THE WAILING HORROR"
+        };
+        public static readonly List<string> AdversaryTokenListRealms = new List<string> {
+            // Realms of the Three Rings
+            "MORLHOSS"
+            , "ZAGRUK"
+            , "VORAG"
+            , "CAUTHLIN"
+            , "DAEGÛR"
+            , "FOLLOWERS OF ARBLAUD AND NOREDHEL"
+            , "NOREDHEL"
+            , "ARBLAUD"
+            , "VESTRI"
+            , "DWARVES OF COPPERHALL"
+            , "BLAEST"
+            , "LONGMAPLE"
+            , "OSKLHÛGI"
+        };
+        public static readonly List<string> AdversaryTokenListRuins = new List<string> {
+            // Ruins of the Lost Realm
+            "ZORIL"
+            , "USAPTHON"
+            , "NEREK"
+            , "LUG, THE LORD OF THE LASH"
+            , "BLACK NÚMENÓREAN SPY"
+            , "BLACK NÚMENÓREAN SAILOR"
+            , "BLACK NÚMENÓREAN SOLDIER"
+            , "DRUSTAN THE MERCENARY"
+            , "IVOCH THE BONELESS"
+            , "TEMBUR, THE FORGOIL-BANE"
+            , "THE EATER OF GHOSTS"
+            , "BEAST OF ANGMAR"
+            , "SNOW-WIGHT"
+            , "TREE- FOLK WARRIOR"
+            , "THUNIR"
+            , "THE DOOM OF NENUIAL"
+            , "HERUNEN"
+            , "DRAMETH THE HOUSELESS"
+            , "HILL- TROLL STALKER"
+            , "THE GHOST BIRD"
+            , "MARSH- SERPENT"
+            , "THE EVIL IN THE SHADOWS"
+            , "FORGOTTEN DEAD"
+            , "RADGUL"
+            , "LARGE SPIDER"
+            , "DOLOMEDIA"
+            , "GNARSH"
+        };
+        public static readonly List<string> AdversaryTokenListShire = new List<string> {
+            // Starter Set - The Shire
+            "DWARVEN ‘SCOUNDRELS’"
+        };
+        public static readonly List<string> AdversaryTokenListSS2Adventure = new List<string> {
+            // Starter Set 2 - Adventure booklet
+            "WILD WOLVES (WARGS)"
+            , "GARAF,  THE FANG OF THE NORTH"
+            , "GOBLIN ARCHERS"
+            , "ORC GUARDS"
+            , "HAKMOGG, ORC HUNTER"
+            , "ORC SOLDIERS"
+        };
+        public static readonly List<string> AdversaryTokenListStarterAdventures = new List<string> {
+            // Starter Set (original) - The Adventures
+            "JACK, THE STONE-TROLL"
+            , "ORC VETERAN"
+            , "BURNT BEAST"
         };
         public static readonly List<string> AdversaryTokenListAdd = new List<string> {
             // Additional
@@ -215,6 +371,7 @@ namespace roll20_adv_import_c
             // added 2024-02-04
             , "ELDER VAMPIRE [E]"
             , "EASTERLING-WARRIOR"
+            , "EASTERLING WARRIORS"
             , "EASTERLING CAPTAIN [E]"
             , "EASTERLING RAIDER"
             , "EASTERLING SORCERER [D]"

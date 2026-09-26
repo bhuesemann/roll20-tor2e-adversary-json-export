@@ -32,20 +32,20 @@ namespace roll20_adv_import_c
         public static Parser<string> TokenCombatProficiencies = Parse.IgnoreCase("COMBAT PROFICIENCIES:").Token().Text();
         public static Parser<string> TokenFellAbilities = Parse.IgnoreCase("FELL ABILITIES:").Token().Text();
 
-        public static Parser<string> WordParser = Parse.Letter.Many().Token().Or(Parse.String("2-Handed")).Text();
+        public static Parser<string> WordParser = Parse.Letter.Or(Parse.Char('’')).Many().Token().Or(Parse.String("2-Handed")).Text();
         public static Parser<string> WordOrMinusParser =
             Parse.Letter.Or(Parse.Char('-'))
             .Except(TokenAttributeLevel)
             .Many().Token().Text();
 
         public static Parser<string> NumberOrMinus =
-            from min in Parse.Char('-').Optional()
+            from min in Parse.Char('-').Or(Parse.Char('—')).Optional()
             from num in Parse.Number.Token().Optional()
             select num.IsDefined ? num.Get() : min.IsDefined ? min.Get().ToString() : "";
 
         public static Parser<string> PhraseParser =
-            from leading in Parse.Letter.Many().Token().Text()
-            from rest in Parse.Chars(' ', '-', ',', ':').Many().Then(_ => WordParser).Many()
+            from leading in Parse.Letter.Or(Parse.Char('’')).Many().Token().Text()
+            from rest in Parse.Chars(' ', '-', ',', ':', '—').Many().Then(_ => WordParser).Many()
             select leading + " " + String.Join(" ", rest);
 
         public static Parser<string> TokenOrder =
@@ -99,15 +99,30 @@ namespace roll20_adv_import_c
 
         public static Parser<WeaponProficiency> WeaponParser =
             from weaponname in PhraseParser.Text()
+            from qualifier in (
+                from lp in Parse.Char('(').Token()
+                from first in Parse.Letter
+                from q in Parse.AnyChar.Except(Parse.Char(')')).Many().Text()
+                from rp in Parse.Char(')')
+                select first + q
+            ).Token().Optional()
             from s1 in Parse.WhiteSpace.Many()
             from rating in Parse.Number.Token().Optional()
+            from ratingFootnote in Parse.Char('*').Optional()
+            from ratingModifier in (
+                from lp in Parse.Char('(').Token()
+                from num in Parse.Number
+                from rp in Parse.Char(')')
+                select num
+            ).Token().Optional()
             from s2 in Parse.WhiteSpace.Many()
             from lpar in Parse.Char('(')
             from damage in NumberOrMinus.Token()
             from sep in Parse.Char('/')
             from injury in NumberOrMinus.Token()
             from comma in Parse.Char(',').Many().Token()
-            from special in PhraseParser.Text()
+            from special in Parse.Char('—').Select(c => c.ToString()).Or(PhraseParser).Token()
+            from footnote in Parse.Char('*').Optional()
             from rpar in Parse.Char(')')
             from rest in Parse.AnyChar
                 .Except(Parse.Chars(',', '.', ' '))
@@ -118,15 +133,18 @@ namespace roll20_adv_import_c
             from point in Parse.Char('.').Optional()
             select new WeaponProficiency()
             {
-                weaponname = weaponname.Trim(),
-                rating = rating.IsDefined ? rating.Get() : "",
+                weaponname = qualifier.IsDefined ? weaponname.Trim() + " (" + qualifier.Get().Trim() + ")" : weaponname.Trim(),
+                rating = (rating.IsDefined ? rating.Get() : "") + (ratingModifier.IsDefined ? " (" + ratingModifier.Get() + ")" : ""),
                 damage = damage,
                 injury = injury,
                 special = special.Trim()
             };
 
         public static Parser<WeaponProficiency[]> weapons =
-            from a in WeaponParser.DelimitedBy(Parse.Chars(',', ' ', '.').Many().Token())
+            from dash in Parse.Char('—').Token().Optional()
+            from a in dash.IsDefined
+                ? Parse.Return(Enumerable.Empty<WeaponProficiency>())
+                : WeaponParser.DelimitedBy(Parse.Chars(',', ' ', '.').Many().Token())
             from weaponProfRest in Parse.AnyChar
                 .Except(TokenFellAbilities)
                 .Except(TokenAttributeLevel)

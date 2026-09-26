@@ -37,6 +37,32 @@ namespace roll20_adv_import_c
             // StriderMode
             sanitized = sanitized.Replace("FEAT DIE: SUCCESS DIEACTIONASPECTFOCUS1Abandon", "FEAT DIE11: SUCCESS DIEACTIONASPECTFOCUS1Abandon");
             sanitized = sanitized.Replace("FEAT DIE: SUCCESS DIEACTIONASPECTFOCUS1Believe", "FEAT DIE12: SUCCESS DIEACTIONASPECTFOCUS1Believe");
+            // Hands of the White Wizard - sidebar headers reuse adversary names, which false-match the stat block boundary
+            sanitized = sanitized.Replace("DUNWALLA’S MOVEMENTS", "Dunwalla’s Movements");
+            sanitized = sanitized.Replace("OUR FRIEND LIGHTROOT", "Our Friend Lightroot");
+            // Moria - location/section headers reuse adversary names, which false-match the stat block boundary
+            sanitized = sanitized.Replace("MALICE OF DURIN’S BANE:", "Malice of Durin’s Bane:");
+            sanitized = sanitized.Replace("DEFEATING DURIN’S BANE", "Defeating Durin’s Bane");
+            sanitized = sanitized.Replace("ANGOLATH’S LAIR", "Angolath’s Lair");
+            sanitized = sanitized.Replace("YAGUL’S HALLS", "Yagul’s Halls");
+            sanitized = sanitized.Replace("YAGUL’S WELL", "Yagul’s Well");
+            sanitized = sanitized.Replace("UFTAK’S LAIR", "Uftak’s Lair");
+            sanitized = sanitized.Replace("RED-NAILS’ HOUSE", "Red-Nails’ House");
+            sanitized = sanitized.Replace("WAKING RED-NAILS", "Waking Red-Nails");
+            sanitized = sanitized.Replace("THE HALL OF THE MAULER", "The Hall of the Mauler");
+            sanitized = sanitized.Replace("THE INVISIBLE GOBLINS", "The Invisible Goblins");
+            // Realms of the Three Rings - timeline/section headers reuse adversary names
+            sanitized = sanitized.Replace("PRISONER OF MORLHOSS", "Prisoner of Morlhoss");
+            sanitized = sanitized.Replace("ARBLAUD’S HOMECOMING", "Arblaud’s Homecoming");
+            sanitized = sanitized.Replace("BLAEST, THE FROST-SPIRIT", "Blaest, the Frost-Spirit");
+            // Ruins of the Lost Realm - location/section headers and quoted narrative reuse adversary names
+            sanitized = sanitized.Replace("BEAST OF ANGMAR”.", "Beast of Angmar”.");
+            sanitized = sanitized.Replace("THE CAVE OF THUNIR", "The Cave of Thunir");
+            sanitized = sanitized.Replace("HERUNEN’S LAIR", "Herunen’s Lair");
+            sanitized = sanitized.Replace("THE GHOST BIRDThe Ghost Bird is a legend", "The Ghost BirdThe Ghost Bird is a legend");
+            sanitized = sanitized.Replace("DOLOMEDIA’S LAIR", "Dolomedia’s Lair");
+            // Starter Set (original) - section titles reuse adversary names
+            sanitized = sanitized.Replace("THE HUNT FOR THE BURNT BEAST", "The Hunt for the Burnt Beast");
             return sanitized;
         }
     }
