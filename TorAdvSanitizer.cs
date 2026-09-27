@@ -1,5 +1,6 @@
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 
 
 namespace roll20_adv_import_c
@@ -11,7 +12,11 @@ namespace roll20_adv_import_c
             string input = File.ReadAllText(filepath, Encoding.UTF8);
             string sanitized = input.Replace('\u00A0', ' ');
             sanitized = sanitized.Replace('\uF0A8', ' ');
-            sanitized = sanitized.Replace('\u00AD', ' ');// added for core's 2024 version
+            // Core Rules - these two soft hyphens fall inside the real hyphenated word "Keen-eyed", unlike
+            // the rest which are ordinary line-wrap artifacts, so fix them before the blanket space below
+            sanitized = sanitized.Replace("Cunning, Keen\u00AD eyed", "Cunning, Keen-eyed");
+            sanitized = sanitized.Replace("Keen\u00AD eyed, Grim", "Keen-eyed, Grim");
+            sanitized = sanitized.Replace('\u00AD', ' ');// soft hyphen is a PDF line-wrap artifact, not a real hyphen
             sanitized = sanitized.Replace("orc- chieftain", "orc-chieftain");// added for core's 2024 version
             sanitized = sanitized.Replace("C- C", "C-C");// added for core's 2024 version
             sanitized = sanitized.Replace("E- T", "E-T");// added for core's 2024 version
@@ -63,6 +68,13 @@ namespace roll20_adv_import_c
             sanitized = sanitized.Replace("DOLOMEDIA’S LAIR", "Dolomedia’s Lair");
             // Starter Set (original) - section titles reuse adversary names
             sanitized = sanitized.Replace("THE HUNT FOR THE BURNT BEAST", "The Hunt for the Burnt Beast");
+            // a word hyphenated across a line-wrap (e.g. "Keen- eyed", "True- hearted", "SNOW- TROLL") leaves a
+            // stray space after the hyphen; collapse it so the word parses as one hyphenated token, in any case
+            sanitized = Regex.Replace(sanitized, "(?<=[a-zA-Z])- (?=[a-zA-Z])", "-");
+            // Tales from the Lone-lands - two narrative mentions reuse the adversary name as a chapter/section
+            // title, which now false-match the stat block boundary after the hyphen collapse above
+            sanitized = sanitized.Replace("THE WORM-WIGHTCall for an AWARENESS roll", "The Worm-Wight. Call for an AWARENESS roll");
+            sanitized = sanitized.Replace("THE WORM-WIGHTWhen the world was young", "The Worm-Wight. When the world was young");
             return sanitized;
         }
     }
