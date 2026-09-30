@@ -4,15 +4,20 @@ This little project aims to create JSON and YAML files for adversaries listed in
 
 > This is a fork of [bhuesemann/roll20-tor2e-adversary-json-export](https://github.com/bhuesemann/roll20-tor2e-adversary-json-export), maintained by [telimektar3](https://github.com/telimektar3/roll20-tor2e-adversary-json-export). All functionality through release 0.1.8 is the original work of bhuesemann; the YAML output and all newly-supported PDF sources starting with release 0.2.0 (see [CHANGELOG.md](CHANGELOG.md)) were added in this fork.
 
-Currently the following PDF files are supported:
+## Supported Files
+
+Currently the following PDF files are fully supported:
 
 - Official TOR2e Core Rule Book
 - CircleOfNoms adversary compendium based on several Tor1e sources.
 - Official TOR2e Tales from the Lone-lands
 - Official TOR2e Strider Mode (roll tables only)
+- Official TOR2e Realms of the Three Rings
+
+These PDF files are partially supported:
+
 - Official TOR2e Hands of the White Wizard
 - Official TOR2e Moria - Through the Doors of Durin
-- Official TOR2e Realms of the Three Rings
 - Official TOR2e Ruins of the Lost Realm
 - Official TOR2e Starter Set - The Shire
 - Official TOR2e Starter Set - The Adventures
