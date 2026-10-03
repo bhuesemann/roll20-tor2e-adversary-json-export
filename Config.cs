@@ -86,20 +86,20 @@ namespace roll20_adv_import_c
             // Tales from the Lone Lands
             "NELLY LONGARMS"
             , "VAMPIRE BATS"
-            , "WOOD- WIGHTS"
+            , "WOOD-WIGHTS"
             , "LOSSOTH HUNTER"
             , "FASTITOCALON"
             , "OSMER THE WIZARD"
-            , "LONG- DEAD GWENDAITH"
+            , "LONG-DEAD GWENDAITH"
             , "HULTMAR MANYHANDED"
             , "SNAVA THE ORC"
-            , "HILL- WIGHT"
+            , "HILL-WIGHT"
             , "WORM-WIGHT"
         };
         public static readonly List<string> AdversaryTokenListHands = new List<string> {
             // Hands of the White Wizard
             "DUNWALLA"
-            , "SNOW- TROLL"
+            , "SNOW-TROLL"
             , "THE BEITHIR"
             , "SEA-PRINCE GUARD"
             , "NAMBAR, THE SEA-PRINCE"
@@ -110,24 +110,24 @@ namespace roll20_adv_import_c
             , "USAPTHON"
             , "THE WATCHER IN THE WATER"
             , "GORGOL"
-            , "KINIR THE RING- WIGHT"
+            , "KINIR THE RING-WIGHT"
             , "RANGER OF ITHILIEN"
             , "HELEDIRIEN"
-            , "HILL- TROLL"
+            , "HILL-TROLL"
             , "RINGWRAITH"
             , "SHELOB"
             , "SARUMAN OF MANY COLOURS, REVEALED"
         };
         public static readonly List<string> AdversaryTokenListMoria = new List<string> {
             // Moria - Through the Doors of Durin
-            "UDÛN- ORC FANATIC"
-            , "UDÛN- ORC FIRE-TOUCHED"
+            "UDÛN-ORC FANATIC"
+            , "UDÛN-ORC FIRE-TOUCHED"
             , "BLACK URUK CAPTAIN"
             , "BLACK URUK"
             , "MESSENGER OF LUGBÚRZ"
             , "DWARVEN THRALL"
             , "DURIN’S BANE"
-            , "ASH- WRAITH"
+            , "ASH-WRAITH"
             , "GREAT CARRION BAT"
             , "MARROW-EATER"
             , "STONE TOAD"
@@ -166,7 +166,7 @@ namespace roll20_adv_import_c
             , "DWARVES OF COPPERHALL"
             , "BLAEST"
             , "LONGMAPLE"
-            , "OSKLHÛGI"
+            , "OSKLHÛG"
         };
         public static readonly List<string> AdversaryTokenListRuins = new List<string> {
             // Ruins of the Lost Realm
@@ -183,14 +183,14 @@ namespace roll20_adv_import_c
             , "THE EATER OF GHOSTS"
             , "BEAST OF ANGMAR"
             , "SNOW-WIGHT"
-            , "TREE- FOLK WARRIOR"
+            , "TREE-FOLK WARRIOR"
             , "THUNIR"
             , "THE DOOM OF NENUIAL"
             , "HERUNEN"
             , "DRAMETH THE HOUSELESS"
-            , "HILL- TROLL STALKER"
+            , "HILL-TROLL STALKER"
             , "THE GHOST BIRD"
-            , "MARSH- SERPENT"
+            , "MARSH-SERPENT"
             , "THE EVIL IN THE SHADOWS"
             , "FORGOTTEN DEAD"
             , "RADGUL"
@@ -461,6 +461,9 @@ namespace roll20_adv_import_c
             "Bewilder.",
             "Black Breath.",
             "Black Dread.",
+            "Bodiless.",
+            "Breath of Smoke.",
+            "Combat Sorcerer.",
             "Countless Children.",
             "Cowardly.",
             "Craven.",
@@ -475,9 +478,15 @@ namespace roll20_adv_import_c
             "Deathless.",
             "Defend Ally.",
             "Denizen of the Dark.",
+            "Disappear.",
             "Disgorge.",
+            "Dreadful Spells: Poison Concoction.",
+            "Dreadful Spells: Slumber.",
+            "Dreadful Spells: Spells of Deception.",
+            "Dreadful Spells: Visions of Torment.",
             "Dreadful Spells.",
             "Drowning in Sorrow.",
+            "Dull-witted.",
             "Dwimmerlaik.",
             "Enthrall.",
             "Fear of Fire.",
@@ -491,9 +500,12 @@ namespace roll20_adv_import_c
             "Formidable.",
             "Foul Reek.",
             "Four-Armed.",
+            "Frost Breath.",
+            "Ghastly Wings.",
             "Ghost Form.",
             "Gorlanc’s Poison.",
             "Great Leap.",
+            "Great Strength.",
             "Hate Sunlight.",
             "Hatred (Beornings & Elves).",
             "Hatred (Beornings).",
@@ -514,7 +526,9 @@ namespace roll20_adv_import_c
             "Horrible Strength.",
             "Horror of the Wood.",
             "Howl of Triumph.",
+            "Invisible.",
             "Many Poisons.",
+            "Mighty Toughness.",
             "Mirkwood Dweller.",
             "Mother Knows Best.",
             "Paralyzing-Poison.",
@@ -529,14 +543,19 @@ namespace roll20_adv_import_c
             "Seize Victim.",
             "Shade Caller.",
             "Shadow of Fear.",
+            "Shapeshift.",
             "Sleep.",
+            "Snake -like Speed.",
             "Snake-Like Speed.",
             "Snake-like Speed.",
+            "Spirit.",
             "Strange Venoms.",
             "Strike Fear.",
             "Sudden Strike.",
             "Sweeping Stroke.",
             "Terror of Desire.",
+            "Thick Armour.",
+            "Thick Bark.",
             "Thick Hide.",
             "Thing of Terror.",
             "Thing of Terror:",
@@ -546,6 +565,7 @@ namespace roll20_adv_import_c
             "Unliving.",
             "Venomous Breath.",
             "Visions of Torment.",
+            "Wavering.",
             "Weak Spot.",
             "Weakened.",
             "Web.",
